@@ -1,9 +1,12 @@
 <template>
-  <div id="app">
-    <h1>Welcome to Collaborative Task Manager!</h1>
-    <input type="text" v-model="name" placeholder="TaskList name">
-    <button v-on:click="createTaskList">Create TaskList</button>
-  </div>
+  <amplify-authenticator>
+      <div id="app">
+        <h1>Welcome to Collaborative Task Manager!</h1>
+        <input type="text" v-model="name" placeholder="TaskList name">
+        <button v-on:click="createTaskList">Create TaskList</button>
+      </div>
+  <amplify-sign-out></amplify-sign-out>
+  </amplify-authenticator>
 </template>
 
 <script>

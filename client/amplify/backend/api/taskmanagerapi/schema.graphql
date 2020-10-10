@@ -15,7 +15,7 @@ type Task @model {
 type User @model {
     id: ID
     name: String
-    taskLists: [TaskList] @connection(name: "usersWithAccessToTaskList")
+    taskLists: TaskList @connection(name: "usersWithAccessToTaskList")
 }
 
 enum TaskStatus {

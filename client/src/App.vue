@@ -11,6 +11,7 @@
 
 <script>
 import { API } from 'aws-amplify';
+import { DataStore } from '@aws-amplify/datastore';
 import { createTaskList } from './graphql/mutations.ts';
 
 export default {

@@ -1,0 +1,270 @@
+type TaskList {
+  id: ID!
+  name: String!
+  tasks(filter: ModelTaskFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTaskConnection
+  users(filter: ModelUserFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelUserConnection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Task {
+  id: ID!
+  description: String!
+  status: TaskStatus!
+  taskList: TaskList
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type User {
+  id: ID
+  name: String
+  taskLists: TaskList
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+enum TaskStatus {
+  created
+  assigned
+  done
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelTaskListConnection {
+  items: [TaskList]
+  nextToken: String
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+input ModelTaskListFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  and: [ModelTaskListFilterInput]
+  or: [ModelTaskListFilterInput]
+  not: ModelTaskListFilterInput
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+type Query {
+  getTaskList(id: ID!): TaskList
+  listTaskLists(filter: ModelTaskListFilterInput, limit: Int, nextToken: String): ModelTaskListConnection
+  getTask(id: ID!): Task
+  listTasks(filter: ModelTaskFilterInput, limit: Int, nextToken: String): ModelTaskConnection
+  getUser(id: ID!): User
+  listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection
+}
+
+input CreateTaskListInput {
+  id: ID
+  name: String!
+}
+
+input UpdateTaskListInput {
+  id: ID!
+  name: String
+}
+
+input DeleteTaskListInput {
+  id: ID
+}
+
+type Mutation {
+  createTaskList(input: CreateTaskListInput!, condition: ModelTaskListConditionInput): TaskList
+  updateTaskList(input: UpdateTaskListInput!, condition: ModelTaskListConditionInput): TaskList
+  deleteTaskList(input: DeleteTaskListInput!, condition: ModelTaskListConditionInput): TaskList
+  createTask(input: CreateTaskInput!, condition: ModelTaskConditionInput): Task
+  updateTask(input: UpdateTaskInput!, condition: ModelTaskConditionInput): Task
+  deleteTask(input: DeleteTaskInput!, condition: ModelTaskConditionInput): Task
+  createUser(input: CreateUserInput!, condition: ModelUserConditionInput): User
+  updateUser(input: UpdateUserInput!, condition: ModelUserConditionInput): User
+  deleteUser(input: DeleteUserInput!, condition: ModelUserConditionInput): User
+}
+
+input ModelTaskListConditionInput {
+  name: ModelStringInput
+  and: [ModelTaskListConditionInput]
+  or: [ModelTaskListConditionInput]
+  not: ModelTaskListConditionInput
+}
+
+type Subscription {
+  onCreateTaskList: TaskList @aws_subscribe(mutations: ["createTaskList"])
+  onUpdateTaskList: TaskList @aws_subscribe(mutations: ["updateTaskList"])
+  onDeleteTaskList: TaskList @aws_subscribe(mutations: ["deleteTaskList"])
+  onCreateTask: Task @aws_subscribe(mutations: ["createTask"])
+  onUpdateTask: Task @aws_subscribe(mutations: ["updateTask"])
+  onDeleteTask: Task @aws_subscribe(mutations: ["deleteTask"])
+  onCreateUser: User @aws_subscribe(mutations: ["createUser"])
+  onUpdateUser: User @aws_subscribe(mutations: ["updateUser"])
+  onDeleteUser: User @aws_subscribe(mutations: ["deleteUser"])
+}
+
+type ModelTaskConnection {
+  items: [Task]
+  nextToken: String
+}
+
+input ModelTaskStatusInput {
+  eq: TaskStatus
+  ne: TaskStatus
+}
+
+input ModelTaskFilterInput {
+  id: ModelIDInput
+  description: ModelStringInput
+  status: ModelTaskStatusInput
+  and: [ModelTaskFilterInput]
+  or: [ModelTaskFilterInput]
+  not: ModelTaskFilterInput
+}
+
+input CreateTaskInput {
+  id: ID
+  description: String!
+  status: TaskStatus!
+  taskTaskListId: ID
+}
+
+input UpdateTaskInput {
+  id: ID!
+  description: String
+  status: TaskStatus
+  taskTaskListId: ID
+}
+
+input DeleteTaskInput {
+  id: ID
+}
+
+input ModelTaskConditionInput {
+  description: ModelStringInput
+  status: ModelTaskStatusInput
+  and: [ModelTaskConditionInput]
+  or: [ModelTaskConditionInput]
+  not: ModelTaskConditionInput
+}
+
+type ModelUserConnection {
+  items: [User]
+  nextToken: String
+}
+
+input ModelUserFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  and: [ModelUserFilterInput]
+  or: [ModelUserFilterInput]
+  not: ModelUserFilterInput
+}
+
+input CreateUserInput {
+  id: ID
+  name: String
+  userTaskListsId: ID
+}
+
+input UpdateUserInput {
+  id: ID!
+  name: String
+  userTaskListsId: ID
+}
+
+input DeleteUserInput {
+  id: ID
+}
+
+input ModelUserConditionInput {
+  name: ModelStringInput
+  and: [ModelUserConditionInput]
+  or: [ModelUserConditionInput]
+  not: ModelUserConditionInput
+}

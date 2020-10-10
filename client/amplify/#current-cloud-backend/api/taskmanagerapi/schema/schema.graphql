@@ -1,0 +1,25 @@
+type TaskList @model {
+    id: ID!
+    name: String!
+    tasks: [Task] @connection(name: "tasksInTaskList")
+    users: [User] @connection(name: "usersWithAccessToTaskList")
+}
+
+type Task @model {
+    id: ID!
+    description: String!
+    status: TaskStatus!
+    taskList: TaskList @connection(name: "tasksInTaskList")
+}
+
+type User @model {
+    id: ID
+    name: String
+    taskLists: TaskList @connection(name: "usersWithAccessToTaskList")
+}
+
+enum TaskStatus {
+    created
+    assigned
+    done
+}

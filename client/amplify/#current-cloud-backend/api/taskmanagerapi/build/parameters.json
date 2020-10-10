@@ -10,5 +10,5 @@
         ]
     },
     "S3DeploymentBucket": "amplify-taskmanager-dev-35147-deployment",
-    "S3DeploymentRootKey": "amplify-appsync-files/c5f601d991ba3c8486bd4de46b2252b6724cb2e3"
+    "S3DeploymentRootKey": "amplify-appsync-files/75453f89db22e6fd46bb75c70e7d6226eb498b39"
 }

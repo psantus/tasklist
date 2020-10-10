@@ -20,7 +20,6 @@ export const onCreateTaskList = /* GraphQL */ `
       users {
         items {
           id
-          name
           createdAt
           updatedAt
         }
@@ -49,7 +48,6 @@ export const onUpdateTaskList = /* GraphQL */ `
       users {
         items {
           id
-          name
           createdAt
           updatedAt
         }
@@ -78,7 +76,6 @@ export const onDeleteTaskList = /* GraphQL */ `
       users {
         items {
           id
-          name
           createdAt
           updatedAt
         }
@@ -158,12 +155,20 @@ export const onDeleteTask = /* GraphQL */ `
     }
   }
 `;
-export const onCreateUser = /* GraphQL */ `
-  subscription OnCreateUser {
-    onCreateUser {
+export const onCreateUsersTaskLists = /* GraphQL */ `
+  subscription OnCreateUsersTaskLists {
+    onCreateUsersTaskLists {
       id
-      name
-      taskLists {
+      user {
+        id
+        name
+        taskLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      taskList {
         id
         name
         tasks {
@@ -174,6 +179,84 @@ export const onCreateUser = /* GraphQL */ `
         }
         createdAt
         updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateUsersTaskLists = /* GraphQL */ `
+  subscription OnUpdateUsersTaskLists {
+    onUpdateUsersTaskLists {
+      id
+      user {
+        id
+        name
+        taskLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      taskList {
+        id
+        name
+        tasks {
+          nextToken
+        }
+        users {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteUsersTaskLists = /* GraphQL */ `
+  subscription OnDeleteUsersTaskLists {
+    onDeleteUsersTaskLists {
+      id
+      user {
+        id
+        name
+        taskLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      taskList {
+        id
+        name
+        tasks {
+          nextToken
+        }
+        users {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateUser = /* GraphQL */ `
+  subscription OnCreateUser {
+    onCreateUser {
+      id
+      name
+      taskLists {
+        items {
+          id
+          createdAt
+          updatedAt
+        }
+        nextToken
       }
       createdAt
       updatedAt
@@ -186,16 +269,12 @@ export const onUpdateUser = /* GraphQL */ `
       id
       name
       taskLists {
-        id
-        name
-        tasks {
-          nextToken
+        items {
+          id
+          createdAt
+          updatedAt
         }
-        users {
-          nextToken
-        }
-        createdAt
-        updatedAt
+        nextToken
       }
       createdAt
       updatedAt
@@ -208,16 +287,12 @@ export const onDeleteUser = /* GraphQL */ `
       id
       name
       taskLists {
-        id
-        name
-        tasks {
-          nextToken
+        items {
+          id
+          createdAt
+          updatedAt
         }
-        users {
-          nextToken
-        }
-        createdAt
-        updatedAt
+        nextToken
       }
       createdAt
       updatedAt

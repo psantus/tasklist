@@ -20,7 +20,6 @@ export const getTaskList = /* GraphQL */ `
       users {
         items {
           id
-          name
           createdAt
           updatedAt
         }
@@ -101,12 +100,20 @@ export const listTasks = /* GraphQL */ `
     }
   }
 `;
-export const getUser = /* GraphQL */ `
-  query GetUser($id: ID!) {
-    getUser(id: $id) {
+export const getUsersTaskLists = /* GraphQL */ `
+  query GetUsersTaskLists($id: ID!) {
+    getUsersTaskLists(id: $id) {
       id
-      name
-      taskLists {
+      user {
+        id
+        name
+        taskLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      taskList {
         id
         name
         tasks {
@@ -117,6 +124,52 @@ export const getUser = /* GraphQL */ `
         }
         createdAt
         updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listUsersTaskListss = /* GraphQL */ `
+  query ListUsersTaskListss(
+    $filter: ModelUsersTaskListsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUsersTaskListss(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        user {
+          id
+          name
+          createdAt
+          updatedAt
+        }
+        taskList {
+          id
+          name
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getUser = /* GraphQL */ `
+  query GetUser($id: ID!) {
+    getUser(id: $id) {
+      id
+      name
+      taskLists {
+        items {
+          id
+          createdAt
+          updatedAt
+        }
+        nextToken
       }
       createdAt
       updatedAt
@@ -134,10 +187,7 @@ export const listUsers = /* GraphQL */ `
         id
         name
         taskLists {
-          id
-          name
-          createdAt
-          updatedAt
+          nextToken
         }
         createdAt
         updatedAt

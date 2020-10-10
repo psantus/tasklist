@@ -2,7 +2,7 @@ type TaskList @model {
     id: ID!
     name: String!
     tasks: [Task] @connection(name: "tasksInTaskList")
-    users: [User] @connection(name: "usersWithAccessToTaskList")
+    users: [UsersTaskLists] @connection(name: "usersAccessingThis")
 }
 
 type Task @model {
@@ -12,10 +12,15 @@ type Task @model {
     taskList: TaskList @connection(name: "tasksInTaskList")
 }
 
+type UsersTaskLists @model { # Just a join table...
+    user: User @connection(name: "taskListsofThisUser")
+    taskList: TaskList @connection(name: "usersAccessingThis")
+}
+
 type User @model {
     id: ID
     name: String
-    taskLists: TaskList @connection(name: "usersWithAccessToTaskList")
+    taskLists: [UsersTaskLists] @connection(name: "taskListsofThisUser")
 }
 
 enum TaskStatus {

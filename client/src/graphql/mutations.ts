@@ -23,7 +23,6 @@ export const createTaskList = /* GraphQL */ `
       users {
         items {
           id
-          name
           createdAt
           updatedAt
         }
@@ -55,7 +54,6 @@ export const updateTaskList = /* GraphQL */ `
       users {
         items {
           id
-          name
           createdAt
           updatedAt
         }
@@ -87,7 +85,6 @@ export const deleteTaskList = /* GraphQL */ `
       users {
         items {
           id
-          name
           createdAt
           updatedAt
         }
@@ -176,15 +173,23 @@ export const deleteTask = /* GraphQL */ `
     }
   }
 `;
-export const createUser = /* GraphQL */ `
-  mutation CreateUser(
-    $input: CreateUserInput!
-    $condition: ModelUserConditionInput
+export const createUsersTaskLists = /* GraphQL */ `
+  mutation CreateUsersTaskLists(
+    $input: CreateUsersTaskListsInput!
+    $condition: ModelUsersTaskListsConditionInput
   ) {
-    createUser(input: $input, condition: $condition) {
+    createUsersTaskLists(input: $input, condition: $condition) {
       id
-      name
-      taskLists {
+      user {
+        id
+        name
+        taskLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      taskList {
         id
         name
         tasks {
@@ -195,6 +200,93 @@ export const createUser = /* GraphQL */ `
         }
         createdAt
         updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateUsersTaskLists = /* GraphQL */ `
+  mutation UpdateUsersTaskLists(
+    $input: UpdateUsersTaskListsInput!
+    $condition: ModelUsersTaskListsConditionInput
+  ) {
+    updateUsersTaskLists(input: $input, condition: $condition) {
+      id
+      user {
+        id
+        name
+        taskLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      taskList {
+        id
+        name
+        tasks {
+          nextToken
+        }
+        users {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteUsersTaskLists = /* GraphQL */ `
+  mutation DeleteUsersTaskLists(
+    $input: DeleteUsersTaskListsInput!
+    $condition: ModelUsersTaskListsConditionInput
+  ) {
+    deleteUsersTaskLists(input: $input, condition: $condition) {
+      id
+      user {
+        id
+        name
+        taskLists {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      taskList {
+        id
+        name
+        tasks {
+          nextToken
+        }
+        users {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createUser = /* GraphQL */ `
+  mutation CreateUser(
+    $input: CreateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    createUser(input: $input, condition: $condition) {
+      id
+      name
+      taskLists {
+        items {
+          id
+          createdAt
+          updatedAt
+        }
+        nextToken
       }
       createdAt
       updatedAt
@@ -210,16 +302,12 @@ export const updateUser = /* GraphQL */ `
       id
       name
       taskLists {
-        id
-        name
-        tasks {
-          nextToken
+        items {
+          id
+          createdAt
+          updatedAt
         }
-        users {
-          nextToken
-        }
-        createdAt
-        updatedAt
+        nextToken
       }
       createdAt
       updatedAt
@@ -235,16 +323,12 @@ export const deleteUser = /* GraphQL */ `
       id
       name
       taskLists {
-        id
-        name
-        tasks {
-          nextToken
+        items {
+          id
+          createdAt
+          updatedAt
         }
-        users {
-          nextToken
-        }
-        createdAt
-        updatedAt
+        nextToken
       }
       createdAt
       updatedAt

@@ -65,7 +65,7 @@ chose to use it to quickly prototype my application and learn the Amplify framek
         NoSQL DB such as DynamoDB. However it matches our use case where the dummy approach consists in 
             - First querying the User x TaskList join table
             - Then, fetch Tasks belonging to user-accessible TaskLists
-        1. Better use DynamoDB, using for instance the following data structure
+        1. Better use DynamoDB, using for instance the following data structure ([Idead sourced here](https://www.alexdebrie.com/posts/dynamodb-one-to-many/#denormalization-by-using-a-complex-attribute))
         ![Dynamo Schema](DynamoSchema.png)
         1. Go relational, using Aurora
 
@@ -89,3 +89,30 @@ chose to use it to quickly prototype my application and learn the Amplify framek
     * Second attempt: build Vue.js App + API from Amplify CLI
     * Add auth, Datastore 
     * Additional thoughs on data representation
+
+To do:
+* Version from Amplify CLI : 
+    * Some UI ^^ (I'm not a frontend guy!!)
+        * Some inspiration ? https://www.microsoft.com/fr-fr/microsoft-365/microsoft-to-do-list-app?rtc=1
+    * Manage data filtering
+        * https://docs.aws.amazon.com/appsync/latest/devguide/security.html#aws-appsync-filtering-information
+        * https://docs.aws.amazon.com/appsync/latest/devguide/security-authorization-use-cases.html#reading-data
+    * Develop mutations (especially Task prioritization)
+        * https://docs.aws.amazon.com/appsync/latest/devguide/tutorial-dynamodb-resolvers.html
+        * https://docs.aws.amazon.com/appsync/latest/devguide/resolver-mapping-template-reference-dynamodb.html
+        * https://docs.aws.amazon.com/appsync/latest/devguide/resolver-mapping-template-reference-dynamodb.html#aws-appsync-resolver-mapping-template-reference-dynamodb-transact-write-items
+    * Add Datastore for offline processing
+        * https://aws.amazon.com/fr/blogs/mobile/aws-appsync-offline-reference-architecture/
+    * Manage conflicts
+        * https://docs.amplify.aws/lib/datastore/conflict/q/platform/js
+    * Clean up all unused mutations and queries
+* Version from Backend to Frontend
+    * Describe DynamoDB Table and mapping to GraphQL schema
+    * Generate client app (and replicate above steps)
+* CI.. I'm still discovering the framework, so CI is a long way to go, but I feel I'll miss it...
+    * https://ichi.pro/fr/aws-amplify-ci-cd-charpie-de-code-et-tests-de-bout-en-bout-258949985974610
+* Undeploy stacks. WYPIWYF (What You Pay Is What You Forget).
+
+Other reference links and items:
+* Vue.js Amplify Quickstart https://docs.amplify.aws/start/q/integration/vue
+* Vue.js Official documentation: https://vuejs.org/v2/guide/

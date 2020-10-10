@@ -256,7 +256,7 @@ Resources:
             Resource:
               - Fn::Join:
                   - ""
-                  - - Fn::GetAtt: TaskTable.Arn
+                  - - Fn::GetAtt: [TaskTable, Arn]
                     - "*"
     DependsOn:
       - TaskTable

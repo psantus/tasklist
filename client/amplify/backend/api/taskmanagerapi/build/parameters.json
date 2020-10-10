@@ -1,0 +1,13 @@
+{
+    "AppSyncApiName": "taskmanagerapi",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": false,
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authtaskmanager204c198b",
+            "Outputs.UserPoolId"
+        ]
+    },
+    "S3DeploymentBucket": "amplify-taskmanager-dev-35147-deployment",
+    "S3DeploymentRootKey": "amplify-appsync-files/59e3970c576f1f3e33a0cbe9d70728f19adf0e26"
+}

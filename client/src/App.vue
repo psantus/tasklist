@@ -8,7 +8,7 @@
 
 <script>
 import { API } from 'aws-amplify';
-import { createTaskList } from './graphql/mutations';
+import { createTaskList } from './graphql/mutations.ts';
 
 export default {
   name: 'app',

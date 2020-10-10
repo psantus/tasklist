@@ -86,7 +86,7 @@
         }
     },
     "Resources": {
-        "UserTable": {
+        "UsersTaskListsTable": {
             "Type": "AWS::DynamoDB::Table",
             "Properties": {
                 "TableName": {
@@ -96,7 +96,7 @@
                             "Fn::Join": [
                                 "-",
                                 [
-                                    "User",
+                                    "UsersTaskLists",
                                     {
                                         "Ref": "GetAttGraphQLAPIApiId"
                                     },
@@ -110,7 +110,7 @@
                             "Fn::Join": [
                                 "-",
                                 [
-                                    "User",
+                                    "UsersTaskLists",
                                     {
                                         "Ref": "GetAttGraphQLAPIApiId"
                                     }
@@ -128,6 +128,14 @@
                 "AttributeDefinitions": [
                     {
                         "AttributeName": "id",
+                        "AttributeType": "S"
+                    },
+                    {
+                        "AttributeName": "usersTaskListsUserId",
+                        "AttributeType": "S"
+                    },
+                    {
+                        "AttributeName": "usersTaskListsTaskListId",
                         "AttributeType": "S"
                     }
                 ],
@@ -178,11 +186,69 @@
                             "Ref": "AWS::NoValue"
                         }
                     ]
-                }
+                },
+                "GlobalSecondaryIndexes": [
+                    {
+                        "IndexName": "gsi-taskListsofThisUser",
+                        "KeySchema": [
+                            {
+                                "AttributeName": "usersTaskListsUserId",
+                                "KeyType": "HASH"
+                            }
+                        ],
+                        "Projection": {
+                            "ProjectionType": "ALL"
+                        },
+                        "ProvisionedThroughput": {
+                            "Fn::If": [
+                                "ShouldUsePayPerRequestBilling",
+                                {
+                                    "Ref": "AWS::NoValue"
+                                },
+                                {
+                                    "ReadCapacityUnits": {
+                                        "Ref": "DynamoDBModelTableReadIOPS"
+                                    },
+                                    "WriteCapacityUnits": {
+                                        "Ref": "DynamoDBModelTableWriteIOPS"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "IndexName": "gsi-usersAccessingThis",
+                        "KeySchema": [
+                            {
+                                "AttributeName": "usersTaskListsTaskListId",
+                                "KeyType": "HASH"
+                            }
+                        ],
+                        "Projection": {
+                            "ProjectionType": "ALL"
+                        },
+                        "ProvisionedThroughput": {
+                            "Fn::If": [
+                                "ShouldUsePayPerRequestBilling",
+                                {
+                                    "Ref": "AWS::NoValue"
+                                },
+                                {
+                                    "ReadCapacityUnits": {
+                                        "Ref": "DynamoDBModelTableReadIOPS"
+                                    },
+                                    "WriteCapacityUnits": {
+                                        "Ref": "DynamoDBModelTableWriteIOPS"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
             },
             "DeletionPolicy": "Delete"
         },
-        "UserIAMRole": {
+        "UsersTaskListsIAMRole": {
             "Type": "AWS::IAM::Role",
             "Properties": {
                 "RoleName": {
@@ -192,7 +258,7 @@
                             "Fn::Join": [
                                 "-",
                                 [
-                                    "Usercb3b2b",
+                                    "UsersTaskLists5e8811",
                                     "role",
                                     {
                                         "Ref": "GetAttGraphQLAPIApiId"
@@ -207,7 +273,7 @@
                             "Fn::Join": [
                                 "-",
                                 [
-                                    "User64da07",
+                                    "UsersTaskLists6f44e6",
                                     "role",
                                     {
                                         "Ref": "GetAttGraphQLAPIApiId"
@@ -259,7 +325,7 @@
                                                                 "Fn::Join": [
                                                                     "-",
                                                                     [
-                                                                        "User",
+                                                                        "UsersTaskLists",
                                                                         {
                                                                             "Ref": "GetAttGraphQLAPIApiId"
                                                                         },
@@ -273,7 +339,7 @@
                                                                 "Fn::Join": [
                                                                     "-",
                                                                     [
-                                                                        "User",
+                                                                        "UsersTaskLists",
                                                                         {
                                                                             "Ref": "GetAttGraphQLAPIApiId"
                                                                         }
@@ -296,7 +362,7 @@
                                                                 "Fn::Join": [
                                                                     "-",
                                                                     [
-                                                                        "User",
+                                                                        "UsersTaskLists",
                                                                         {
                                                                             "Ref": "GetAttGraphQLAPIApiId"
                                                                         },
@@ -310,7 +376,7 @@
                                                                 "Fn::Join": [
                                                                     "-",
                                                                     [
-                                                                        "User",
+                                                                        "UsersTaskLists",
                                                                         {
                                                                             "Ref": "GetAttGraphQLAPIApiId"
                                                                         }
@@ -330,17 +396,17 @@
                 ]
             }
         },
-        "UserDataSource": {
+        "UsersTaskListsDataSource": {
             "Type": "AWS::AppSync::DataSource",
             "Properties": {
                 "ApiId": {
                     "Ref": "GetAttGraphQLAPIApiId"
                 },
-                "Name": "UserTable",
+                "Name": "UsersTaskListsTable",
                 "Type": "AMAZON_DYNAMODB",
                 "ServiceRoleArn": {
                     "Fn::GetAtt": [
-                        "UserIAMRole",
+                        "UsersTaskListsIAMRole",
                         "Arn"
                     ]
                 },
@@ -355,7 +421,7 @@
                                 "Fn::Join": [
                                     "-",
                                     [
-                                        "User",
+                                        "UsersTaskLists",
                                         {
                                             "Ref": "GetAttGraphQLAPIApiId"
                                         },
@@ -369,7 +435,7 @@
                                 "Fn::Join": [
                                     "-",
                                     [
-                                        "User",
+                                        "UsersTaskLists",
                                         {
                                             "Ref": "GetAttGraphQLAPIApiId"
                                         }
@@ -381,10 +447,10 @@
                 }
             },
             "DependsOn": [
-                "UserIAMRole"
+                "UsersTaskListsIAMRole"
             ]
         },
-        "GetUserResolver": {
+        "GetUsersTaskListsResolver": {
             "Type": "AWS::AppSync::Resolver",
             "Properties": {
                 "ApiId": {
@@ -392,11 +458,11 @@
                 },
                 "DataSourceName": {
                     "Fn::GetAtt": [
-                        "UserDataSource",
+                        "UsersTaskListsDataSource",
                         "Name"
                     ]
                 },
-                "FieldName": "getUser",
+                "FieldName": "getUsersTaskLists",
                 "TypeName": "Query",
                 "RequestMappingTemplateS3Location": {
                     "Fn::Sub": [
@@ -413,7 +479,7 @@
                                     ".",
                                     [
                                         "Query",
-                                        "getUser",
+                                        "getUsersTaskLists",
                                         "req",
                                         "vtl"
                                     ]
@@ -437,7 +503,7 @@
                                     ".",
                                     [
                                         "Query",
-                                        "getUser",
+                                        "getUsersTaskLists",
                                         "res",
                                         "vtl"
                                     ]
@@ -448,7 +514,7 @@
                 }
             }
         },
-        "ListUserResolver": {
+        "ListUsersTaskListsResolver": {
             "Type": "AWS::AppSync::Resolver",
             "Properties": {
                 "ApiId": {
@@ -456,11 +522,11 @@
                 },
                 "DataSourceName": {
                     "Fn::GetAtt": [
-                        "UserDataSource",
+                        "UsersTaskListsDataSource",
                         "Name"
                     ]
                 },
-                "FieldName": "listUsers",
+                "FieldName": "listUsersTaskListss",
                 "TypeName": "Query",
                 "RequestMappingTemplateS3Location": {
                     "Fn::Sub": [
@@ -477,7 +543,7 @@
                                     ".",
                                     [
                                         "Query",
-                                        "listUsers",
+                                        "listUsersTaskListss",
                                         "req",
                                         "vtl"
                                     ]
@@ -501,7 +567,7 @@
                                     ".",
                                     [
                                         "Query",
-                                        "listUsers",
+                                        "listUsersTaskListss",
                                         "res",
                                         "vtl"
                                     ]
@@ -512,7 +578,7 @@
                 }
             }
         },
-        "CreateUserResolver": {
+        "CreateUsersTaskListsResolver": {
             "Type": "AWS::AppSync::Resolver",
             "Properties": {
                 "ApiId": {
@@ -520,11 +586,11 @@
                 },
                 "DataSourceName": {
                     "Fn::GetAtt": [
-                        "UserDataSource",
+                        "UsersTaskListsDataSource",
                         "Name"
                     ]
                 },
-                "FieldName": "createUser",
+                "FieldName": "createUsersTaskLists",
                 "TypeName": "Mutation",
                 "RequestMappingTemplateS3Location": {
                     "Fn::Sub": [
@@ -541,7 +607,7 @@
                                     ".",
                                     [
                                         "Mutation",
-                                        "createUser",
+                                        "createUsersTaskLists",
                                         "req",
                                         "vtl"
                                     ]
@@ -565,7 +631,7 @@
                                     ".",
                                     [
                                         "Mutation",
-                                        "createUser",
+                                        "createUsersTaskLists",
                                         "res",
                                         "vtl"
                                     ]
@@ -576,7 +642,7 @@
                 }
             }
         },
-        "UpdateUserResolver": {
+        "UpdateUsersTaskListsResolver": {
             "Type": "AWS::AppSync::Resolver",
             "Properties": {
                 "ApiId": {
@@ -584,11 +650,11 @@
                 },
                 "DataSourceName": {
                     "Fn::GetAtt": [
-                        "UserDataSource",
+                        "UsersTaskListsDataSource",
                         "Name"
                     ]
                 },
-                "FieldName": "updateUser",
+                "FieldName": "updateUsersTaskLists",
                 "TypeName": "Mutation",
                 "RequestMappingTemplateS3Location": {
                     "Fn::Sub": [
@@ -605,7 +671,7 @@
                                     ".",
                                     [
                                         "Mutation",
-                                        "updateUser",
+                                        "updateUsersTaskLists",
                                         "req",
                                         "vtl"
                                     ]
@@ -629,7 +695,7 @@
                                     ".",
                                     [
                                         "Mutation",
-                                        "updateUser",
+                                        "updateUsersTaskLists",
                                         "res",
                                         "vtl"
                                     ]
@@ -640,7 +706,7 @@
                 }
             }
         },
-        "DeleteUserResolver": {
+        "DeleteUsersTaskListsResolver": {
             "Type": "AWS::AppSync::Resolver",
             "Properties": {
                 "ApiId": {
@@ -648,11 +714,11 @@
                 },
                 "DataSourceName": {
                     "Fn::GetAtt": [
-                        "UserDataSource",
+                        "UsersTaskListsDataSource",
                         "Name"
                     ]
                 },
-                "FieldName": "deleteUser",
+                "FieldName": "deleteUsersTaskLists",
                 "TypeName": "Mutation",
                 "RequestMappingTemplateS3Location": {
                     "Fn::Sub": [
@@ -669,7 +735,7 @@
                                     ".",
                                     [
                                         "Mutation",
-                                        "deleteUser",
+                                        "deleteUsersTaskLists",
                                         "req",
                                         "vtl"
                                     ]
@@ -693,7 +759,7 @@
                                     ".",
                                     [
                                         "Mutation",
-                                        "deleteUser",
+                                        "deleteUsersTaskLists",
                                         "res",
                                         "vtl"
                                     ]
@@ -706,11 +772,11 @@
         }
     },
     "Outputs": {
-        "GetAttUserTableStreamArn": {
+        "GetAttUsersTaskListsTableStreamArn": {
             "Description": "Your DynamoDB table StreamArn.",
             "Value": {
                 "Fn::GetAtt": [
-                    "UserTable",
+                    "UsersTaskListsTable",
                     "StreamArn"
                 ]
             },
@@ -723,18 +789,18 @@
                                 "Ref": "AppSyncApiId"
                             },
                             "GetAtt",
-                            "UserTable",
+                            "UsersTaskListsTable",
                             "StreamArn"
                         ]
                     ]
                 }
             }
         },
-        "GetAttUserDataSourceName": {
+        "GetAttUsersTaskListsDataSourceName": {
             "Description": "Your model DataSource name.",
             "Value": {
                 "Fn::GetAtt": [
-                    "UserDataSource",
+                    "UsersTaskListsDataSource",
                     "Name"
                 ]
             },
@@ -747,17 +813,17 @@
                                 "Ref": "AppSyncApiId"
                             },
                             "GetAtt",
-                            "UserDataSource",
+                            "UsersTaskListsDataSource",
                             "Name"
                         ]
                     ]
                 }
             }
         },
-        "GetAttUserTableName": {
+        "GetAttUsersTaskListsTableName": {
             "Description": "Your DynamoDB table name.",
             "Value": {
-                "Ref": "UserTable"
+                "Ref": "UsersTaskListsTable"
             },
             "Export": {
                 "Name": {
@@ -768,7 +834,7 @@
                                 "Ref": "AppSyncApiId"
                             },
                             "GetAtt",
-                            "UserTable",
+                            "UsersTaskListsTable",
                             "Name"
                         ]
                     ]

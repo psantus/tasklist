@@ -2,7 +2,7 @@ type TaskList {
   id: ID!
   name: String!
   tasks(filter: ModelTaskFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTaskConnection
-  users(filter: ModelUserFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelUserConnection
+  users(filter: ModelUsersTaskListsFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelUsersTaskListsConnection
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
 }
@@ -16,10 +16,18 @@ type Task {
   updatedAt: AWSDateTime!
 }
 
+type UsersTaskLists {
+  id: ID!
+  user: User
+  taskList: TaskList
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
 type User {
   id: ID
   name: String
-  taskLists: TaskList
+  taskLists(filter: ModelUsersTaskListsFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelUsersTaskListsConnection
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
 }
@@ -139,6 +147,8 @@ type Query {
   listTaskLists(filter: ModelTaskListFilterInput, limit: Int, nextToken: String): ModelTaskListConnection
   getTask(id: ID!): Task
   listTasks(filter: ModelTaskFilterInput, limit: Int, nextToken: String): ModelTaskConnection
+  getUsersTaskLists(id: ID!): UsersTaskLists
+  listUsersTaskListss(filter: ModelUsersTaskListsFilterInput, limit: Int, nextToken: String): ModelUsersTaskListsConnection
   getUser(id: ID!): User
   listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection
 }
@@ -164,6 +174,9 @@ type Mutation {
   createTask(input: CreateTaskInput!, condition: ModelTaskConditionInput): Task
   updateTask(input: UpdateTaskInput!, condition: ModelTaskConditionInput): Task
   deleteTask(input: DeleteTaskInput!, condition: ModelTaskConditionInput): Task
+  createUsersTaskLists(input: CreateUsersTaskListsInput!, condition: ModelUsersTaskListsConditionInput): UsersTaskLists
+  updateUsersTaskLists(input: UpdateUsersTaskListsInput!, condition: ModelUsersTaskListsConditionInput): UsersTaskLists
+  deleteUsersTaskLists(input: DeleteUsersTaskListsInput!, condition: ModelUsersTaskListsConditionInput): UsersTaskLists
   createUser(input: CreateUserInput!, condition: ModelUserConditionInput): User
   updateUser(input: UpdateUserInput!, condition: ModelUserConditionInput): User
   deleteUser(input: DeleteUserInput!, condition: ModelUserConditionInput): User
@@ -183,6 +196,9 @@ type Subscription {
   onCreateTask: Task @aws_subscribe(mutations: ["createTask"])
   onUpdateTask: Task @aws_subscribe(mutations: ["updateTask"])
   onDeleteTask: Task @aws_subscribe(mutations: ["deleteTask"])
+  onCreateUsersTaskLists: UsersTaskLists @aws_subscribe(mutations: ["createUsersTaskLists"])
+  onUpdateUsersTaskLists: UsersTaskLists @aws_subscribe(mutations: ["updateUsersTaskLists"])
+  onDeleteUsersTaskLists: UsersTaskLists @aws_subscribe(mutations: ["deleteUsersTaskLists"])
   onCreateUser: User @aws_subscribe(mutations: ["createUser"])
   onUpdateUser: User @aws_subscribe(mutations: ["updateUser"])
   onDeleteUser: User @aws_subscribe(mutations: ["deleteUser"])
@@ -233,6 +249,38 @@ input ModelTaskConditionInput {
   not: ModelTaskConditionInput
 }
 
+type ModelUsersTaskListsConnection {
+  items: [UsersTaskLists]
+  nextToken: String
+}
+
+input ModelUsersTaskListsFilterInput {
+  and: [ModelUsersTaskListsFilterInput]
+  or: [ModelUsersTaskListsFilterInput]
+  not: ModelUsersTaskListsFilterInput
+}
+
+input CreateUsersTaskListsInput {
+  id: ID
+  usersTaskListsUserId: ID
+  usersTaskListsTaskListId: ID
+}
+
+input UpdateUsersTaskListsInput {
+  usersTaskListsUserId: ID
+  usersTaskListsTaskListId: ID
+}
+
+input DeleteUsersTaskListsInput {
+  id: ID
+}
+
+input ModelUsersTaskListsConditionInput {
+  and: [ModelUsersTaskListsConditionInput]
+  or: [ModelUsersTaskListsConditionInput]
+  not: ModelUsersTaskListsConditionInput
+}
+
 type ModelUserConnection {
   items: [User]
   nextToken: String
@@ -249,13 +297,11 @@ input ModelUserFilterInput {
 input CreateUserInput {
   id: ID
   name: String
-  userTaskListsId: ID
 }
 
 input UpdateUserInput {
   id: ID!
   name: String
-  userTaskListsId: ID
 }
 
 input DeleteUserInput {

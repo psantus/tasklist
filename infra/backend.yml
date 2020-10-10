@@ -1,0 +1,389 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: AppSync Template for a Task app using Cognito User Pools' groups for
+  coarse-grained authorization by using the @aws_auth(cognito_groups) directive
+
+Parameters:
+  graphQLAPIName:
+    Type: String
+    Description: The name for the AppSync GraphQL API to be created.
+    Default: My Tasks App
+    MinLength: 1
+    MaxLength: 32
+  enableDynamoDBTableEncryption:
+    Type: String
+    Description: This is used to specify if the DynamoDB tables should be encrypted.
+    Default: true
+    AllowedValues: [true, false]
+  dynamoDBTableBillingMode:
+    Type: String
+    Description: This is used to configure the billing mode on the DynamoDB tables.
+    Default: PAY_PER_REQUEST
+    AllowedValues: [PROVISIONED, PAY_PER_REQUEST]
+
+Conditions:
+  IsDynamoDBBillingModeProvisioned:
+    Fn::Equals:
+      - Ref: dynamoDBTableBillingMode
+      - PROVISIONED
+
+Outputs:
+  GraphQLApiId:
+    Description: Unique AWS AppSync GraphQL API Identifier
+    Value: !GetAtt AppSyncSampleAPI.ApiId
+
+Resources:
+
+  UserPool:
+    Type: "AWS::Cognito::UserPool"
+    Properties:
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: false
+        UnusedAccountValidityDays: 7
+      AutoVerifiedAttributes:
+        - phone_number
+      MfaConfiguration: OPTIONAL
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 6
+          RequireLowercase: false
+          RequireNumbers: false
+          RequireSymbols: false
+          RequireUppercase: false
+      UserPoolName: AppSyncGroupsAuthExamplePool
+      Schema:
+        - Name: name
+          AttributeDataType: String
+          Mutable: true
+          Required: false
+        - Name: phone_number
+          AttributeDataType: String
+          Mutable: true
+          Required: true
+      SmsConfiguration:
+        SnsCallerArn: !GetAtt SNSRole.Arn
+        ExternalId: AppSyncGroupsSample-external
+
+  SNSRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "cognito-idp.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Policies:
+        - PolicyName: "CognitoSNSPolicy"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: "sns:publish"
+                Resource: "*"
+
+  UserPoolClient:
+    Type: "AWS::Cognito::UserPoolClient"
+    Properties:
+      ClientName: AppSyncGroupsSampleClient
+      GenerateSecret: false
+      UserPoolId: !Ref UserPool
+
+  ManagerGroup:
+    Type: "AWS::Cognito::UserPoolGroup"
+    Properties:
+      Description: Sample group for manager users
+      GroupName: ManagerGroup
+      Precedence: 1
+      UserPoolId: !Ref UserPool
+
+  EmployeeGroup:
+    Type: "AWS::Cognito::UserPoolGroup"
+    Properties:
+      Description: Sample group for employee users
+      GroupName: EmployeeGroup
+      Precedence: 2
+      UserPoolId: !Ref UserPool
+
+  TaskTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      ProvisionedThroughput:
+        Fn::If:
+          - IsDynamoDBBillingModeProvisioned
+          - ReadCapacityUnits: "5"
+            WriteCapacityUnits: "5"
+          - Ref: AWS::NoValue
+      BillingMode:
+        Fn::If:
+          - IsDynamoDBBillingModeProvisioned
+          - Ref: AWS::NoValue
+          - Ref: dynamoDBTableBillingMode
+      SSESpecification:
+        SSEEnabled: { "Ref" : "enableDynamoDBTableEncryption" }
+      TableName:
+        Fn::Sub:
+          - "AppSyncGroupsSampleDDBRole-${APIId}"
+          - APIId: !GetAtt AppSyncSampleAPI.ApiId
+    DependsOn: AppSyncSampleAPI
+
+  AppSyncSampleAPI:
+    Type: "AWS::AppSync::GraphQLApi"
+    Properties:
+      Name: !Sub ${graphQLAPIName}
+      AuthenticationType: "AMAZON_COGNITO_USER_POOLS"
+      UserPoolConfig:
+        UserPoolId: !Ref UserPool
+        AwsRegion: !Ref "AWS::Region"
+        DefaultAction: ALLOW
+
+  AppSyncSampleSchema:
+    Type: "AWS::AppSync::GraphQLSchema"
+    DependsOn:
+      - AppSyncSampleAPI
+    Properties:
+      ApiId: !GetAtt AppSyncSampleAPI.ApiId
+      Definition: |
+        type Mutation {
+          # In this example, only users in the ManagerGroup can create tasks
+          createTask(
+            owner: String!,
+            title: String!,
+            taskStatus: String!,
+            description: String!
+          ): Task
+            @aws_auth(cognito_groups: ["ManagerGroup"])
+          # Both Employees and Managers can update a task's status
+          updateTaskStatus(id: ID!, taskStatus: String!): Task
+            @aws_auth(cognito_groups: ["EmployeeGroup","ManagerGroup"])
+          updateTaskBody(id: ID!, title: String!, description: String!): Task
+            @aws_auth(cognito_groups: ["ManagerGroup"])
+        }
+
+        type Query {
+          # Users belonging to both EmployeesGroup and ManagerGroup can read a particular task
+          getTask(id: ID!): Task
+            @aws_auth(cognito_groups: ["EmployeeGroup","ManagerGroup"])
+          # Only Managers can list all the Tasks
+          allTasks(nextToken: String): TaskConnection
+            @aws_auth(cognito_groups: ["ManagerGroup"])
+        }
+
+        type Task {
+          id: ID!
+          owner: String!
+          title: String!
+          description: String!
+          taskStatus: String
+        }
+
+        type TaskConnection {
+          items: [Task]
+          nextToken: String
+        }
+
+        schema {
+          query: Query
+          mutation: Mutation
+        }
+
+  AppSyncGroupsAuthSampleDynamoDBRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName:
+        Fn::Sub:
+          - "AppSyncGroupsSampleDDBRole-${APIId}"
+          - APIId: !GetAtt AppSyncSampleAPI.ApiId
+      ManagedPolicyArns:
+        - Ref: AppSyncGroupsAuthSampleDynamoDBPolicy
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - appsync.amazonaws.com
+    DependsOn:
+      - AppSyncGroupsAuthSampleDynamoDBPolicy
+
+  AppSyncGroupsAuthSampleDynamoDBPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Managed policy to allow AWS AppSync to access the tables created by this template.
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - dynamodb:GetItem
+              - dynamodb:PutItem
+              - dynamodb:DeleteItem
+              - dynamodb:UpdateItem
+              - dynamodb:Query
+              - dynamodb:Scan
+              - dynamodb:BatchGetItem
+              - dynamodb:BatchWriteItem
+            Resource:
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt: TaskTable.Arn
+                    - "*"
+    DependsOn:
+      - TaskTable
+
+  AppSyncDDBDataSource:
+    Type: "AWS::AppSync::DataSource"
+    DependsOn:
+      - AppSyncSampleAPI
+    Properties:
+      ApiId: !GetAtt AppSyncSampleAPI.ApiId
+      Name: "TaskDynamoDataSource"
+      Description: "A DataSource for Tasks in DynamoDB."
+      Type: "AMAZON_DYNAMODB"
+      ServiceRoleArn: !GetAtt AppSyncGroupsAuthSampleDynamoDBRole.Arn
+      DynamoDBConfig:
+        AwsRegion: !Ref "AWS::Region"
+        TableName: !Ref TaskTable
+        UseCallerCredentials: false
+
+  AppSyncResolverAllTasks:
+    Type: "AWS::AppSync::Resolver"
+    DependsOn:
+      - AppSyncSampleSchema
+      - AppSyncDDBDataSource
+    Properties:
+      ApiId: !GetAtt AppSyncSampleAPI.ApiId
+      TypeName: "Query"
+      FieldName: "allTasks"
+      DataSourceName: !GetAtt AppSyncDDBDataSource.Name
+      RequestMappingTemplate: |
+        {
+            "version" : "2017-02-28",
+            "operation" : "Scan"
+            ,"limit": 15
+            #if( ${context.arguments.nextToken} )
+                ,"nextToken": "${context.arguments.nextToken}"
+            #end
+        }
+      ResponseMappingTemplate: |
+        {
+            "items": $utils.toJson($context.result.items)
+            #if( ${context.result.nextToken} )
+                ,"nextToken": "${context.result.nextToken}"
+            #end
+        }
+
+  AppSyncResolverGetTask:
+    Type: "AWS::AppSync::Resolver"
+    DependsOn:
+      - AppSyncSampleSchema
+      - AppSyncDDBDataSource
+    Properties:
+      ApiId: !GetAtt AppSyncSampleAPI.ApiId
+      TypeName: "Query"
+      FieldName: "getTask"
+      DataSourceName: !GetAtt AppSyncDDBDataSource.Name
+      RequestMappingTemplate: |
+        {
+            "version": "2017-02-28",
+            "operation": "GetItem",
+            "key": {
+                "id": $util.dynamodb.toDynamoDBJson($ctx.args.id),
+            }
+        }
+      ResponseMappingTemplate: |
+        $util.toJson($ctx.result)
+
+  AppSyncResolverUpdateTaskBody:
+    Type: "AWS::AppSync::Resolver"
+    DependsOn:
+      - AppSyncSampleSchema
+      - AppSyncDDBDataSource
+    Properties:
+      ApiId: !GetAtt AppSyncSampleAPI.ApiId
+      TypeName: "Mutation"
+      FieldName: "updateTaskBody"
+      DataSourceName: !GetAtt AppSyncDDBDataSource.Name
+      RequestMappingTemplate: |
+        {
+            "version" : "2017-02-28",
+            "operation" : "UpdateItem",
+            "key" : {
+                "id": $util.dynamodb.toDynamoDBJson($ctx.args.id),
+            },
+            "update" : {
+                "expression" : "SET title = :title, description = :description",
+                "expressionValues": {
+                    ":title" : { "S": "${context.arguments.title}"},
+                    ":description" : { "S": "${context.arguments.description}"}
+                }
+            }
+        }
+      ResponseMappingTemplate: |
+        $util.toJson($ctx.result)
+
+  AppSyncResolverUpdateTaskStatus:
+    Type: "AWS::AppSync::Resolver"
+    DependsOn:
+      - AppSyncSampleSchema
+      - AppSyncDDBDataSource
+    Properties:
+      ApiId: !GetAtt AppSyncSampleAPI.ApiId
+      TypeName: "Mutation"
+      FieldName: "updateTaskStatus"
+      DataSourceName: !GetAtt AppSyncDDBDataSource.Name
+      RequestMappingTemplate: |
+        {
+            "version" : "2017-02-28",
+            "operation" : "UpdateItem",
+            "key" : {
+                "id": $util.dynamodb.toDynamoDBJson($ctx.args.id),
+            },
+            "update" : {
+                "expression" : "SET taskStatus = :taskStatus",
+                "expressionValues": {
+                    ":taskStatus" : { "S": "${context.arguments.taskStatus}" }
+                }
+            }
+        }
+      ResponseMappingTemplate: |
+        $util.toJson($ctx.result)
+
+  AppSyncResolverCreateTask:
+    Type: "AWS::AppSync::Resolver"
+    DependsOn:
+      - AppSyncSampleSchema
+      - AppSyncDDBDataSource
+    Properties:
+      ApiId: !GetAtt AppSyncSampleAPI.ApiId
+      TypeName: "Mutation"
+      FieldName: "createTask"
+      DataSourceName: !GetAtt AppSyncDDBDataSource.Name
+      RequestMappingTemplate: |
+        {
+            "version" : "2017-02-28",
+            "operation" : "PutItem",
+            "key" : {
+                ## If object "id" should come from GraphQL arguments,
+                ## change to $util.dynamodb.toDynamoDBJson($ctx.args.id)
+                "id": $util.dynamodb.toDynamoDBJson($util.autoId()),
+            },
+            "attributeValues" : {
+                "owner": { "S" : "${context.arguments.owner}" },
+                "title": { "S" : "${context.arguments.title}" },
+                "description": { "S" : "${context.arguments.description}" },
+                "taskStatus": { "S" : "${context.arguments.taskStatus}" }
+            }
+        }
+      ResponseMappingTemplate: |
+        $util.toJson($ctx.result)

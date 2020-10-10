@@ -1,6 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: AppSync Template for a Task app using Cognito User Pools' groups for
-  coarse-grained authorization by using the @aws_auth(cognito_groups) directive
+Description: A collaborative task management backend
 
 Parameters:
   graphQLAPIName:
@@ -49,7 +48,7 @@ Resources:
           RequireNumbers: false
           RequireSymbols: false
           RequireUppercase: false
-      UserPoolName: AppSyncGroupsAuthExamplePool
+      UserPoolName: AppUserPool
       Schema:
         - Name: name
           AttributeDataType: String
@@ -62,6 +61,27 @@ Resources:
       SmsConfiguration:
         SnsCallerArn: !GetAtt SNSRole.Arn
         ExternalId: AppSyncGroupsSample-external
+
+  DemoUser1:
+    Type: "AWS::Cognito::UserPoolUser"
+    Properties:
+      DesiredDeliveryMediums:
+        - "EMAIL"
+      UserAttributes:
+        - "Name": "email"
+          "Value": "paul.santus+demo1@gmail.com"
+      Username: "DemoUser1"
+      UserPoolId: !Ref UserPool
+  DemoUser2:
+    Type: "AWS::Cognito::UserPoolUser"
+    Properties:
+      DesiredDeliveryMediums:
+        - "EMAIL"
+      UserAttributes:
+        - "Name": "email"
+          "Value": "paul.santus+demo2@gmail.com"
+      Username: "DemoUser2"
+      UserPoolId: !Ref UserPool
 
   SNSRole:
     Type: "AWS::IAM::Role"

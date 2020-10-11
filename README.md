@@ -93,11 +93,11 @@ chose to use it to quickly prototype my application and learn the Amplify framek
     * Second attempt: build Vue.js App + API from Amplify CLI
     * Add auth, Datastore 
     * Additional thoughs on data representation
+* Oct. 11th, evening (~3h)
+    * Work on Vue.js front, add components to query AppSync API
 
 To do:
 * Version from Amplify CLI : 
-    * Some UI ^^ (I'm not a frontend guy!!)
-        * Some inspiration ? https://www.microsoft.com/fr-fr/microsoft-365/microsoft-to-do-list-app?rtc=1
     * Manage data filtering
         * https://docs.aws.amazon.com/appsync/latest/devguide/security.html#aws-appsync-filtering-information
         * https://docs.aws.amazon.com/appsync/latest/devguide/security-authorization-use-cases.html#reading-data

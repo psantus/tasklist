@@ -1,38 +1,66 @@
 <template>
   <amplify-authenticator>
       <div id="app">
-        <h1>Welcome to Collaborative Task Manager!</h1>
-        <input type="text" v-model="name" placeholder="TaskList name">
-        <button v-on:click="createTaskList">Create TaskList</button>
+        <div class="sidenav">
+            <TaskListFinder v-on:togglelist="currentTaskListId = $event"></TaskListFinder>
+            <TaskListCreator></TaskListCreator>
+        </div>
+        <div class="main">
+            <span v-if="!currentTaskListId">Please select a list from the left menu...</span>
+            <TaskListViewer v-if="currentTaskListId" v-bind:taskListId="currentTaskListId"></TaskListViewer>
+            <TaskCreator v-if="currentTaskListId" v-bind:taskListId="currentTaskListId"></TaskCreator>
+        </div>
       </div>
-  <amplify-sign-out></amplify-sign-out>
+  <amplify-sign-out class="footer"></amplify-sign-out>
   </amplify-authenticator>
 </template>
 
 <script>
-import { API } from 'aws-amplify';
+import TaskListCreator from './components/TaskListCreator.vue';
+import TaskListFinder from './components/TaskListFinder.vue';
+import TaskListViewer from './components/TaskListViewer.vue';
+import TaskCreator from './components/TaskCreator.vue';
 // import { DataStore } from '@aws-amplify/datastore';
-import { createTaskList } from './graphql/mutations.ts';
 
 export default {
   name: 'app',
   data() {
     return {
-      name: '',
-      description: ''
+      currentTaskListId: null
     }
   },
-  methods: {
-    async createTaskList() {
-      const { name } = this;
-      if (!name) return;
-      const taskList = { name };
-      await API.graphql({
-        query: createTaskList,
-        variables: {input: taskList},
-      });
-      this.name = '';
-    }
+  components: {
+    TaskListFinder,
+    TaskListCreator,
+    TaskListViewer,
+    TaskCreator
   }
 };
 </script>
+  <style type="text/css" scoped>
+  .sidenav {
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #FF9900;
+    overflow-x: hidden;
+    padding-top: 20px;
+    color: #fff;
+    font-family: 'Amazon Ember', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  }
+  .main {
+    margin-left: 200px; /* Same as the width of the sidenav */
+    font-size: 28px; /* Increased text to enable scrolling */
+    padding: 0px 10px;
+  }
+  .footer{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  padding-top:50px;
+  height:45px;
+  }
+  </style>

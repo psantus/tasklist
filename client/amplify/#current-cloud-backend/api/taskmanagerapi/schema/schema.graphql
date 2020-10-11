@@ -8,19 +8,19 @@ type TaskList @model {
 type Task @model {
     id: ID!
     description: String!
-    status: TaskStatus!
+    status: TaskStatus!,
+    followingTask: Task,
     taskList: TaskList @connection(name: "tasksInTaskList")
 }
 
-type UsersTaskLists @model { # Just a join table...
-    user: User @connection(name: "taskListsofThisUser")
+type UsersTaskLists @model @key(fields: ["user"], name: "ByUser") { # Just a join table...
+    user: String!
     taskList: TaskList @connection(name: "usersAccessingThis")
 }
 
 type User @model {
-    id: ID
+    id: ID!
     name: String
-    taskLists: [UsersTaskLists] @connection(name: "taskListsofThisUser")
 }
 
 enum TaskStatus {

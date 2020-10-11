@@ -11,6 +11,7 @@ type Task {
   id: ID!
   description: String!
   status: TaskStatus!
+  followingTask: Task
   taskList: TaskList
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
@@ -18,16 +19,15 @@ type Task {
 
 type UsersTaskLists {
   id: ID!
-  user: User
+  user: String!
   taskList: TaskList
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
 }
 
 type User {
-  id: ID
+  id: ID!
   name: String
-  taskLists(filter: ModelUsersTaskListsFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelUsersTaskListsConnection
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
 }
@@ -255,6 +255,7 @@ type ModelUsersTaskListsConnection {
 }
 
 input ModelUsersTaskListsFilterInput {
+  user: ModelStringInput
   and: [ModelUsersTaskListsFilterInput]
   or: [ModelUsersTaskListsFilterInput]
   not: ModelUsersTaskListsFilterInput
@@ -262,12 +263,12 @@ input ModelUsersTaskListsFilterInput {
 
 input CreateUsersTaskListsInput {
   id: ID
-  usersTaskListsUserId: ID
+  user: String!
   usersTaskListsTaskListId: ID
 }
 
 input UpdateUsersTaskListsInput {
-  usersTaskListsUserId: ID
+  user: String
   usersTaskListsTaskListId: ID
 }
 
@@ -276,6 +277,7 @@ input DeleteUsersTaskListsInput {
 }
 
 input ModelUsersTaskListsConditionInput {
+  user: ModelStringInput
   and: [ModelUsersTaskListsConditionInput]
   or: [ModelUsersTaskListsConditionInput]
   not: ModelUsersTaskListsConditionInput

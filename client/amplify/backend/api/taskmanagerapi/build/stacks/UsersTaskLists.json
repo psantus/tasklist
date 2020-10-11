@@ -131,7 +131,7 @@
                         "AttributeType": "S"
                     },
                     {
-                        "AttributeName": "usersTaskListsUserId",
+                        "AttributeName": "user",
                         "AttributeType": "S"
                     },
                     {
@@ -189,10 +189,10 @@
                 },
                 "GlobalSecondaryIndexes": [
                     {
-                        "IndexName": "gsi-taskListsofThisUser",
+                        "IndexName": "ByUser",
                         "KeySchema": [
                             {
-                                "AttributeName": "usersTaskListsUserId",
+                                "AttributeName": "user",
                                 "KeyType": "HASH"
                             }
                         ],

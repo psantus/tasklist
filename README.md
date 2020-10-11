@@ -70,7 +70,11 @@ chose to use it to quickly prototype my application and learn the Amplify framek
         1. Go relational, using Aurora
 
 * One remark on conflict resolution:
-
+    * Expecting to resolve all possible conflicts is unreasonable (otherwise git would be fully automated). Still:
+         * the Amplify datastore offers some automated conflict resolution options
+         * The data structure (followingTask vs. rank in Task) limits the number of conflicts. 
+         * To avoid inconsistencies due to conflict resolution, mutations such as prioritization should mobilize 
+         DynamoDB's TransactWriteItems operation. 
     
 ## Organisation of this repository and set up
 

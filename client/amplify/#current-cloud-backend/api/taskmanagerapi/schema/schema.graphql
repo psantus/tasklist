@@ -1,16 +1,16 @@
 type TaskList @model {
     id: ID!
     name: String!
-    tasks: [Task] @connection(name: "tasksInTaskList")
+    tasks: [Task] @connection(keyName: "byTaskList", fields: ["id"])
     users: [UsersTaskLists] @connection(name: "usersAccessingThis")
 }
 
-type Task @model {
+type Task @model @key(name: "byTaskList", fields: ["taskListId"]) {
     id: ID!
     description: String!
     status: TaskStatus!,
-    followingTask: Task,
-    taskList: TaskList @connection(name: "tasksInTaskList")
+    followingTask: ID,
+    taskListId: ID!,
 }
 
 type UsersTaskLists @model @key(fields: ["user"], name: "ByUser") { # Just a join table...

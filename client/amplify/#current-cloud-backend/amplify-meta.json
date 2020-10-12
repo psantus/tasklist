@@ -22,7 +22,7 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-taskmanager-dev-35147-deployment/amplify-cfn-templates/auth/taskmanager204c198b-cloudformation-template.yml",
         "logicalId": "authtaskmanager204c198b"
       },
-      "lastPushTimeStamp": "2020-10-11T23:20:40.739Z",
+      "lastPushTimeStamp": "2020-10-12T00:26:08.617Z",
       "output": {
         "AppClientSecret": "9k67qokl0todtimiank5ccdlngh47pje370b43b19arho4un0on",
         "UserPoolId": "eu-west-1_GsGRFn1hk",
@@ -56,8 +56,8 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-taskmanager-dev-35147-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apitaskmanagerapi"
       },
-      "lastPushTimeStamp": "2020-10-11T23:20:43.346Z",
-      "lastPushDirHash": "2h8NbP4r6cx4vzmMSfyORyx8+zk="
+      "lastPushTimeStamp": "2020-10-12T00:26:11.515Z",
+      "lastPushDirHash": "UpdmSWAwCsuIXsdtBj8VgFd/7Aw="
     }
   }
 }

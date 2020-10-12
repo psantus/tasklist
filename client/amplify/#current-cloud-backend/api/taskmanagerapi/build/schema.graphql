@@ -11,8 +11,8 @@ type Task {
   id: ID!
   description: String!
   status: TaskStatus!
-  followingTask: Task
-  taskList: TaskList
+  followingTask: ID
+  taskListId: ID!
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
 }
@@ -218,6 +218,8 @@ input ModelTaskFilterInput {
   id: ModelIDInput
   description: ModelStringInput
   status: ModelTaskStatusInput
+  followingTask: ModelIDInput
+  taskListId: ModelIDInput
   and: [ModelTaskFilterInput]
   or: [ModelTaskFilterInput]
   not: ModelTaskFilterInput
@@ -227,14 +229,16 @@ input CreateTaskInput {
   id: ID
   description: String!
   status: TaskStatus!
-  taskTaskListId: ID
+  followingTask: ID
+  taskListId: ID!
 }
 
 input UpdateTaskInput {
   id: ID!
   description: String
   status: TaskStatus
-  taskTaskListId: ID
+  followingTask: ID
+  taskListId: ID
 }
 
 input DeleteTaskInput {
@@ -244,6 +248,8 @@ input DeleteTaskInput {
 input ModelTaskConditionInput {
   description: ModelStringInput
   status: ModelTaskStatusInput
+  followingTask: ModelIDInput
+  taskListId: ModelIDInput
   and: [ModelTaskConditionInput]
   or: [ModelTaskConditionInput]
   not: ModelTaskConditionInput

@@ -131,7 +131,7 @@
                         "AttributeType": "S"
                     },
                     {
-                        "AttributeName": "taskTaskListId",
+                        "AttributeName": "taskListId",
                         "AttributeType": "S"
                     }
                 ],
@@ -185,10 +185,10 @@
                 },
                 "GlobalSecondaryIndexes": [
                     {
-                        "IndexName": "gsi-tasksInTaskList",
+                        "IndexName": "byTaskList",
                         "KeySchema": [
                             {
-                                "AttributeName": "taskTaskListId",
+                                "AttributeName": "taskListId",
                                 "KeyType": "HASH"
                             }
                         ],

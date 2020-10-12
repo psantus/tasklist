@@ -9,6 +9,7 @@
             <span v-if="!currentTaskListId">Please select a list from the left menu...</span>
             <TaskListViewer v-if="currentTaskListId" v-bind:taskListId="currentTaskListId"></TaskListViewer>
             <TaskCreator v-if="currentTaskListId" v-bind:taskListId="currentTaskListId"></TaskCreator>
+            <TaskListSharing v-if="currentTaskListId" v-bind:taskListId="currentTaskListId"></TaskListSharing>
         </div>
       </div>
   <amplify-sign-out class="footer"></amplify-sign-out>
@@ -19,6 +20,7 @@
 import TaskListCreator from './components/TaskListCreator.vue';
 import TaskListFinder from './components/TaskListFinder.vue';
 import TaskListViewer from './components/TaskListViewer.vue';
+import TaskListSharing from './components/TaskListSharing.vue';
 import TaskCreator from './components/TaskCreator.vue';
 // import { DataStore } from '@aws-amplify/datastore';
 
@@ -33,7 +35,8 @@ export default {
     TaskListFinder,
     TaskListCreator,
     TaskListViewer,
-    TaskCreator
+    TaskCreator,
+    TaskListSharing
   }
 };
 </script>

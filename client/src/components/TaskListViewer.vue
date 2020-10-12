@@ -19,7 +19,7 @@ export default {
   props: ['taskListId'],
   watch: {
     taskListId: function(newVal, oldVal) {
-      console.log('Switching list from ', oldVal, ' to ', newVal);
+      console.log('Viewer : Switching list from ', oldVal, ' to ', newVal);
       this.taskListIdToDisplay = newVal;
       this.getTaskList();
     }
@@ -33,7 +33,6 @@ export default {
   },
   methods: {
     async getTaskList() {
-      console.log('Calling getTaskList', this.taskListId, this.taskListIdToDisplay, this.tasksToDisplay);
       const taskListToSearch = this.taskListIdToDisplay;
 
       let tasksToDisplay;

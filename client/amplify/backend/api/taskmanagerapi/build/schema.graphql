@@ -1,8 +1,9 @@
 type TaskList {
   id: ID!
+  owner: String
+  editors: [String]
   name: String!
   tasks(filter: ModelTaskFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelTaskConnection
-  users(filter: ModelUsersTaskListsFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelUsersTaskListsConnection
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
 }
@@ -13,21 +14,6 @@ type Task {
   status: TaskStatus!
   followingTask: ID
   taskListId: ID!
-  createdAt: AWSDateTime!
-  updatedAt: AWSDateTime!
-}
-
-type UsersTaskLists {
-  id: ID!
-  user: String!
-  taskList: TaskList
-  createdAt: AWSDateTime!
-  updatedAt: AWSDateTime!
-}
-
-type User {
-  id: ID!
-  name: String
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
 }
@@ -123,6 +109,8 @@ input ModelSizeInput {
 
 input ModelTaskListFilterInput {
   id: ModelIDInput
+  owner: ModelStringInput
+  editors: ModelStringInput
   name: ModelStringInput
   and: [ModelTaskListFilterInput]
   or: [ModelTaskListFilterInput]
@@ -147,19 +135,19 @@ type Query {
   listTaskLists(filter: ModelTaskListFilterInput, limit: Int, nextToken: String): ModelTaskListConnection
   getTask(id: ID!): Task
   listTasks(filter: ModelTaskFilterInput, limit: Int, nextToken: String): ModelTaskConnection
-  getUsersTaskLists(id: ID!): UsersTaskLists
-  listUsersTaskListss(filter: ModelUsersTaskListsFilterInput, limit: Int, nextToken: String): ModelUsersTaskListsConnection
-  getUser(id: ID!): User
-  listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection
 }
 
 input CreateTaskListInput {
   id: ID
+  owner: String
+  editors: [String]
   name: String!
 }
 
 input UpdateTaskListInput {
   id: ID!
+  owner: String
+  editors: [String]
   name: String
 }
 
@@ -174,12 +162,6 @@ type Mutation {
   createTask(input: CreateTaskInput!, condition: ModelTaskConditionInput): Task
   updateTask(input: UpdateTaskInput!, condition: ModelTaskConditionInput): Task
   deleteTask(input: DeleteTaskInput!, condition: ModelTaskConditionInput): Task
-  createUsersTaskLists(input: CreateUsersTaskListsInput!, condition: ModelUsersTaskListsConditionInput): UsersTaskLists
-  updateUsersTaskLists(input: UpdateUsersTaskListsInput!, condition: ModelUsersTaskListsConditionInput): UsersTaskLists
-  deleteUsersTaskLists(input: DeleteUsersTaskListsInput!, condition: ModelUsersTaskListsConditionInput): UsersTaskLists
-  createUser(input: CreateUserInput!, condition: ModelUserConditionInput): User
-  updateUser(input: UpdateUserInput!, condition: ModelUserConditionInput): User
-  deleteUser(input: DeleteUserInput!, condition: ModelUserConditionInput): User
 }
 
 input ModelTaskListConditionInput {
@@ -190,18 +172,12 @@ input ModelTaskListConditionInput {
 }
 
 type Subscription {
-  onCreateTaskList: TaskList @aws_subscribe(mutations: ["createTaskList"])
-  onUpdateTaskList: TaskList @aws_subscribe(mutations: ["updateTaskList"])
-  onDeleteTaskList: TaskList @aws_subscribe(mutations: ["deleteTaskList"])
+  onCreateTaskList(owner: String!, editors: String!): TaskList @aws_subscribe(mutations: ["createTaskList"])
+  onUpdateTaskList(owner: String!, editors: String!): TaskList @aws_subscribe(mutations: ["updateTaskList"])
+  onDeleteTaskList(owner: String!, editors: String!): TaskList @aws_subscribe(mutations: ["deleteTaskList"])
   onCreateTask: Task @aws_subscribe(mutations: ["createTask"])
   onUpdateTask: Task @aws_subscribe(mutations: ["updateTask"])
   onDeleteTask: Task @aws_subscribe(mutations: ["deleteTask"])
-  onCreateUsersTaskLists: UsersTaskLists @aws_subscribe(mutations: ["createUsersTaskLists"])
-  onUpdateUsersTaskLists: UsersTaskLists @aws_subscribe(mutations: ["updateUsersTaskLists"])
-  onDeleteUsersTaskLists: UsersTaskLists @aws_subscribe(mutations: ["deleteUsersTaskLists"])
-  onCreateUser: User @aws_subscribe(mutations: ["createUser"])
-  onUpdateUser: User @aws_subscribe(mutations: ["updateUser"])
-  onDeleteUser: User @aws_subscribe(mutations: ["deleteUser"])
 }
 
 type ModelTaskConnection {
@@ -253,72 +229,4 @@ input ModelTaskConditionInput {
   and: [ModelTaskConditionInput]
   or: [ModelTaskConditionInput]
   not: ModelTaskConditionInput
-}
-
-type ModelUsersTaskListsConnection {
-  items: [UsersTaskLists]
-  nextToken: String
-}
-
-input ModelUsersTaskListsFilterInput {
-  user: ModelStringInput
-  and: [ModelUsersTaskListsFilterInput]
-  or: [ModelUsersTaskListsFilterInput]
-  not: ModelUsersTaskListsFilterInput
-}
-
-input CreateUsersTaskListsInput {
-  id: ID
-  user: String!
-  usersTaskListsTaskListId: ID
-}
-
-input UpdateUsersTaskListsInput {
-  user: String
-  usersTaskListsTaskListId: ID
-}
-
-input DeleteUsersTaskListsInput {
-  id: ID
-}
-
-input ModelUsersTaskListsConditionInput {
-  user: ModelStringInput
-  and: [ModelUsersTaskListsConditionInput]
-  or: [ModelUsersTaskListsConditionInput]
-  not: ModelUsersTaskListsConditionInput
-}
-
-type ModelUserConnection {
-  items: [User]
-  nextToken: String
-}
-
-input ModelUserFilterInput {
-  id: ModelIDInput
-  name: ModelStringInput
-  and: [ModelUserFilterInput]
-  or: [ModelUserFilterInput]
-  not: ModelUserFilterInput
-}
-
-input CreateUserInput {
-  id: ID
-  name: String
-}
-
-input UpdateUserInput {
-  id: ID!
-  name: String
-}
-
-input DeleteUserInput {
-  id: ID
-}
-
-input ModelUserConditionInput {
-  name: ModelStringInput
-  and: [ModelUserConditionInput]
-  or: [ModelUserConditionInput]
-  not: ModelUserConditionInput
 }

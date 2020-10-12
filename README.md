@@ -95,6 +95,8 @@ chose to use it to quickly prototype my application and learn the Amplify framek
     * Additional thoughs on data representation
 * Oct. 11th, evening (~3h)
     * Work on Vue.js front, add components to query AppSync API
+    * Rationalize TaskList <=> Task relationship (getting to learn NoSQL)
+    * Use Amplify Auth and remove unnecessary User tables
 
 To do:
 * Version from Amplify CLI : 

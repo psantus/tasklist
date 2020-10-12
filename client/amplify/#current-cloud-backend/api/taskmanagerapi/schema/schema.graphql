@@ -1,26 +1,19 @@
-type TaskList @model {
+type TaskList @model @auth(rules:
+                            [{ allow: owner },
+                             { allow: owner, ownerField: "editors", operations: [update, read]}]){
     id: ID!
+    owner: String
+    editors: [String]
     name: String!
     tasks: [Task] @connection(keyName: "byTaskList", fields: ["id"])
-    users: [UsersTaskLists] @connection(name: "usersAccessingThis")
 }
 
-type Task @model @key(name: "byTaskList", fields: ["taskListId"]) {
+type Task @model @key(name: "byTaskList", fields: ["taskListId"]) { #TODO: manage auth based on parent TaskList editors
     id: ID!
     description: String!
     status: TaskStatus!
     followingTask: ID
     taskListId: ID!
-}
-
-type UsersTaskLists @model @key(fields: ["user"], name: "ByUser") { # Just a join table...
-    user: String!
-    taskList: TaskList @connection(name: "usersAccessingThis")
-}
-
-type User @model {
-    id: ID!
-    name: String
 }
 
 enum TaskStatus {

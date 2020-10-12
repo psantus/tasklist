@@ -12,6 +12,8 @@ export const getTaskList = /* GraphQL */ `
           id
           description
           status
+          followingTask
+          taskListId
           createdAt
           updatedAt
         }
@@ -20,6 +22,7 @@ export const getTaskList = /* GraphQL */ `
       users {
         items {
           id
+          user
           createdAt
           updatedAt
         }
@@ -59,18 +62,8 @@ export const getTask = /* GraphQL */ `
       id
       description
       status
-      taskList {
-        id
-        name
-        tasks {
-          nextToken
-        }
-        users {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
+      followingTask
+      taskListId
       createdAt
       updatedAt
     }
@@ -87,12 +80,8 @@ export const listTasks = /* GraphQL */ `
         id
         description
         status
-        taskList {
-          id
-          name
-          createdAt
-          updatedAt
-        }
+        followingTask
+        taskListId
         createdAt
         updatedAt
       }
@@ -104,15 +93,7 @@ export const getUsersTaskLists = /* GraphQL */ `
   query GetUsersTaskLists($id: ID!) {
     getUsersTaskLists(id: $id) {
       id
-      user {
-        id
-        name
-        taskLists {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
+      user
       taskList {
         id
         name
@@ -139,12 +120,7 @@ export const listUsersTaskListss = /* GraphQL */ `
     listUsersTaskListss(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        user {
-          id
-          name
-          createdAt
-          updatedAt
-        }
+        user
         taskList {
           id
           name
@@ -163,14 +139,6 @@ export const getUser = /* GraphQL */ `
     getUser(id: $id) {
       id
       name
-      taskLists {
-        items {
-          id
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       createdAt
       updatedAt
     }
@@ -186,9 +154,6 @@ export const listUsers = /* GraphQL */ `
       items {
         id
         name
-        taskLists {
-          nextToken
-        }
         createdAt
         updatedAt
       }

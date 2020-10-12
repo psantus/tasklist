@@ -26,7 +26,7 @@ export default {
       const task = {
         description: this.name,
         status: "created",
-        taskTaskListId: this.taskListId
+        taskListId: this.taskListId
        };
       await API.graphql({
         query: createTask,

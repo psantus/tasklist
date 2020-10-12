@@ -15,6 +15,8 @@ export const createTaskList = /* GraphQL */ `
           id
           description
           status
+          followingTask
+          taskListId
           createdAt
           updatedAt
         }
@@ -23,6 +25,7 @@ export const createTaskList = /* GraphQL */ `
       users {
         items {
           id
+          user
           createdAt
           updatedAt
         }
@@ -46,6 +49,8 @@ export const updateTaskList = /* GraphQL */ `
           id
           description
           status
+          followingTask
+          taskListId
           createdAt
           updatedAt
         }
@@ -54,6 +59,7 @@ export const updateTaskList = /* GraphQL */ `
       users {
         items {
           id
+          user
           createdAt
           updatedAt
         }
@@ -77,6 +83,8 @@ export const deleteTaskList = /* GraphQL */ `
           id
           description
           status
+          followingTask
+          taskListId
           createdAt
           updatedAt
         }
@@ -85,6 +93,7 @@ export const deleteTaskList = /* GraphQL */ `
       users {
         items {
           id
+          user
           createdAt
           updatedAt
         }
@@ -104,18 +113,8 @@ export const createTask = /* GraphQL */ `
       id
       description
       status
-      taskList {
-        id
-        name
-        tasks {
-          nextToken
-        }
-        users {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
+      followingTask
+      taskListId
       createdAt
       updatedAt
     }
@@ -130,18 +129,8 @@ export const updateTask = /* GraphQL */ `
       id
       description
       status
-      taskList {
-        id
-        name
-        tasks {
-          nextToken
-        }
-        users {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
+      followingTask
+      taskListId
       createdAt
       updatedAt
     }
@@ -156,18 +145,8 @@ export const deleteTask = /* GraphQL */ `
       id
       description
       status
-      taskList {
-        id
-        name
-        tasks {
-          nextToken
-        }
-        users {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
+      followingTask
+      taskListId
       createdAt
       updatedAt
     }
@@ -180,15 +159,7 @@ export const createUsersTaskLists = /* GraphQL */ `
   ) {
     createUsersTaskLists(input: $input, condition: $condition) {
       id
-      user {
-        id
-        name
-        taskLists {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
+      user
       taskList {
         id
         name
@@ -213,15 +184,7 @@ export const updateUsersTaskLists = /* GraphQL */ `
   ) {
     updateUsersTaskLists(input: $input, condition: $condition) {
       id
-      user {
-        id
-        name
-        taskLists {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
+      user
       taskList {
         id
         name
@@ -246,15 +209,7 @@ export const deleteUsersTaskLists = /* GraphQL */ `
   ) {
     deleteUsersTaskLists(input: $input, condition: $condition) {
       id
-      user {
-        id
-        name
-        taskLists {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
+      user
       taskList {
         id
         name
@@ -280,14 +235,6 @@ export const createUser = /* GraphQL */ `
     createUser(input: $input, condition: $condition) {
       id
       name
-      taskLists {
-        items {
-          id
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       createdAt
       updatedAt
     }
@@ -301,14 +248,6 @@ export const updateUser = /* GraphQL */ `
     updateUser(input: $input, condition: $condition) {
       id
       name
-      taskLists {
-        items {
-          id
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       createdAt
       updatedAt
     }
@@ -322,14 +261,6 @@ export const deleteUser = /* GraphQL */ `
     deleteUser(input: $input, condition: $condition) {
       id
       name
-      taskLists {
-        items {
-          id
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       createdAt
       updatedAt
     }

@@ -12,6 +12,8 @@ export const onCreateTaskList = /* GraphQL */ `
           id
           description
           status
+          followingTask
+          taskListId
           createdAt
           updatedAt
         }
@@ -20,6 +22,7 @@ export const onCreateTaskList = /* GraphQL */ `
       users {
         items {
           id
+          user
           createdAt
           updatedAt
         }
@@ -40,6 +43,8 @@ export const onUpdateTaskList = /* GraphQL */ `
           id
           description
           status
+          followingTask
+          taskListId
           createdAt
           updatedAt
         }
@@ -48,6 +53,7 @@ export const onUpdateTaskList = /* GraphQL */ `
       users {
         items {
           id
+          user
           createdAt
           updatedAt
         }
@@ -68,6 +74,8 @@ export const onDeleteTaskList = /* GraphQL */ `
           id
           description
           status
+          followingTask
+          taskListId
           createdAt
           updatedAt
         }
@@ -76,6 +84,7 @@ export const onDeleteTaskList = /* GraphQL */ `
       users {
         items {
           id
+          user
           createdAt
           updatedAt
         }
@@ -92,18 +101,8 @@ export const onCreateTask = /* GraphQL */ `
       id
       description
       status
-      taskList {
-        id
-        name
-        tasks {
-          nextToken
-        }
-        users {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
+      followingTask
+      taskListId
       createdAt
       updatedAt
     }
@@ -115,18 +114,8 @@ export const onUpdateTask = /* GraphQL */ `
       id
       description
       status
-      taskList {
-        id
-        name
-        tasks {
-          nextToken
-        }
-        users {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
+      followingTask
+      taskListId
       createdAt
       updatedAt
     }
@@ -138,18 +127,8 @@ export const onDeleteTask = /* GraphQL */ `
       id
       description
       status
-      taskList {
-        id
-        name
-        tasks {
-          nextToken
-        }
-        users {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
+      followingTask
+      taskListId
       createdAt
       updatedAt
     }
@@ -159,15 +138,7 @@ export const onCreateUsersTaskLists = /* GraphQL */ `
   subscription OnCreateUsersTaskLists {
     onCreateUsersTaskLists {
       id
-      user {
-        id
-        name
-        taskLists {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
+      user
       taskList {
         id
         name
@@ -189,15 +160,7 @@ export const onUpdateUsersTaskLists = /* GraphQL */ `
   subscription OnUpdateUsersTaskLists {
     onUpdateUsersTaskLists {
       id
-      user {
-        id
-        name
-        taskLists {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
+      user
       taskList {
         id
         name
@@ -219,15 +182,7 @@ export const onDeleteUsersTaskLists = /* GraphQL */ `
   subscription OnDeleteUsersTaskLists {
     onDeleteUsersTaskLists {
       id
-      user {
-        id
-        name
-        taskLists {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
+      user
       taskList {
         id
         name
@@ -250,14 +205,6 @@ export const onCreateUser = /* GraphQL */ `
     onCreateUser {
       id
       name
-      taskLists {
-        items {
-          id
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       createdAt
       updatedAt
     }
@@ -268,14 +215,6 @@ export const onUpdateUser = /* GraphQL */ `
     onUpdateUser {
       id
       name
-      taskLists {
-        items {
-          id
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       createdAt
       updatedAt
     }
@@ -286,14 +225,6 @@ export const onDeleteUser = /* GraphQL */ `
     onDeleteUser {
       id
       name
-      taskLists {
-        items {
-          id
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       createdAt
       updatedAt
     }

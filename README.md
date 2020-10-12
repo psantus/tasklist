@@ -101,6 +101,7 @@ chose to use it to quickly prototype my application and learn the Amplify framek
 To do:
 * Version from Amplify CLI : 
     * Manage data filtering
+        * Done on TaskList. Yet yo be done on Task (based on Parent => Lambda?)
         * https://docs.aws.amazon.com/appsync/latest/devguide/security.html#aws-appsync-filtering-information
         * https://docs.aws.amazon.com/appsync/latest/devguide/security-authorization-use-cases.html#reading-data
     * Develop mutations (especially Task prioritization)
@@ -111,6 +112,7 @@ To do:
         * https://aws.amazon.com/fr/blogs/mobile/aws-appsync-offline-reference-architecture/
     * Manage conflicts
         * https://docs.amplify.aws/lib/datastore/conflict/q/platform/js
+    * Manage subscriptions
     * Clean up all unused mutations and queries
 * Version from Backend to Frontend
     * Describe DynamoDB Table and mapping to GraphQL schema

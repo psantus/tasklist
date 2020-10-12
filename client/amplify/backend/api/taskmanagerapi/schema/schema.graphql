@@ -8,9 +8,9 @@ type TaskList @model {
 type Task @model @key(name: "byTaskList", fields: ["taskListId"]) {
     id: ID!
     description: String!
-    status: TaskStatus!,
-    followingTask: ID,
-    taskListId: ID!,
+    status: TaskStatus!
+    followingTask: ID
+    taskListId: ID!
 }
 
 type UsersTaskLists @model @key(fields: ["user"], name: "ByUser") { # Just a join table...

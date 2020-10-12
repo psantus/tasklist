@@ -133,7 +133,17 @@
 						]
 					},
 					"S3DeploymentBucket": "amplify-taskmanager-dev-35147-deployment",
-					"S3DeploymentRootKey": "amplify-appsync-files/4910139eaa83f9fe58179b0ffb4c6bfbe36abe63",
+					"S3DeploymentRootKey": "amplify-appsync-files/2868806b2756b5625b9f6e716463869d1edf29b2",
+					"env": "dev"
+				}
+			}
+		},
+		"hostingS3AndCloudFront": {
+			"Type": "AWS::CloudFormation::Stack",
+			"Properties": {
+				"TemplateURL": "https://s3.amazonaws.com/amplify-taskmanager-dev-35147-deployment/amplify-cfn-templates/hosting/template.json",
+				"Parameters": {
+					"bucketName": "taskanager-20201012041727-hostingbucket",
 					"env": "dev"
 				}
 			}

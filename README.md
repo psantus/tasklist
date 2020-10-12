@@ -1,5 +1,7 @@
 # Task-list exercise
 
+Application's current state is available here:
+
 ## Functional overview
 
 ### Data Model

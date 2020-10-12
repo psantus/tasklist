@@ -22,7 +22,7 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-taskmanager-dev-35147-deployment/amplify-cfn-templates/auth/taskmanager204c198b-cloudformation-template.yml",
         "logicalId": "authtaskmanager204c198b"
       },
-      "lastPushTimeStamp": "2020-10-12T01:01:28.050Z",
+      "lastPushTimeStamp": "2020-10-12T02:48:20.581Z",
       "output": {
         "AppClientSecret": "9k67qokl0todtimiank5ccdlngh47pje370b43b19arho4un0on",
         "UserPoolId": "eu-west-1_GsGRFn1hk",
@@ -32,7 +32,7 @@
         "IdentityPoolName": "taskmanager204c198b_identitypool_204c198b__dev",
         "UserPoolName": "taskmanager204c198b_userpool_204c198b"
       },
-      "lastPushDirHash": "we2tB3+KAc8lPoLPU7V7dEdcBTs="
+      "lastPushDirHash": "lIBjJib45pElplxYUUSO3xIrSRk="
     }
   },
   "api": {
@@ -56,8 +56,30 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-taskmanager-dev-35147-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apitaskmanagerapi"
       },
-      "lastPushTimeStamp": "2020-10-12T01:01:30.673Z",
-      "lastPushDirHash": "Pc8rNcoaUG49FVIvBnJm0Ak6t94="
+      "lastPushTimeStamp": "2020-10-12T02:48:20.584Z",
+      "lastPushDirHash": "UpkJ8RTT98swS5Tt8Wirwr8dNmc="
+    }
+  },
+  "hosting": {
+    "S3AndCloudFront": {
+      "service": "S3AndCloudFront",
+      "providerPlugin": "awscloudformation",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-taskmanager-dev-35147-deployment/amplify-cfn-templates/hosting/template.json",
+        "logicalId": "hostingS3AndCloudFront"
+      },
+      "lastPushTimeStamp": "2020-10-12T02:48:20.591Z",
+      "output": {
+        "CloudFrontSecureURL": "https://d16ryq4gcjfv5u.cloudfront.net",
+        "S3BucketSecureURL": "https://taskanager-20201012041727-hostingbucket-dev.s3.amazonaws.com",
+        "CloudFrontOriginAccessIdentity": "E2TMLC29K31P3O",
+        "WebsiteURL": "http://taskanager-20201012041727-hostingbucket-dev.s3-website-eu-west-1.amazonaws.com",
+        "CloudFrontDistributionID": "E3NX2GBX2QD7F8",
+        "Region": "eu-west-1",
+        "HostingBucketName": "taskanager-20201012041727-hostingbucket-dev",
+        "CloudFrontDomainName": "d16ryq4gcjfv5u.cloudfront.net"
+      },
+      "lastPushDirHash": "JFXmoosYKQNuI9YNaAClUXmWGo0="
     }
   }
 }

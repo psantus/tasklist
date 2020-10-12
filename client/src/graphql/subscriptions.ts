@@ -3,9 +3,11 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateTaskList = /* GraphQL */ `
-  subscription OnCreateTaskList {
-    onCreateTaskList {
+  subscription OnCreateTaskList($owner: String!, $editors: String!) {
+    onCreateTaskList(owner: $owner, editors: $editors) {
       id
+      owner
+      editors
       name
       tasks {
         items {
@@ -14,15 +16,6 @@ export const onCreateTaskList = /* GraphQL */ `
           status
           followingTask
           taskListId
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      users {
-        items {
-          id
-          user
           createdAt
           updatedAt
         }
@@ -34,9 +27,11 @@ export const onCreateTaskList = /* GraphQL */ `
   }
 `;
 export const onUpdateTaskList = /* GraphQL */ `
-  subscription OnUpdateTaskList {
-    onUpdateTaskList {
+  subscription OnUpdateTaskList($owner: String!, $editors: String!) {
+    onUpdateTaskList(owner: $owner, editors: $editors) {
       id
+      owner
+      editors
       name
       tasks {
         items {
@@ -45,15 +40,6 @@ export const onUpdateTaskList = /* GraphQL */ `
           status
           followingTask
           taskListId
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      users {
-        items {
-          id
-          user
           createdAt
           updatedAt
         }
@@ -65,9 +51,11 @@ export const onUpdateTaskList = /* GraphQL */ `
   }
 `;
 export const onDeleteTaskList = /* GraphQL */ `
-  subscription OnDeleteTaskList {
-    onDeleteTaskList {
+  subscription OnDeleteTaskList($owner: String!, $editors: String!) {
+    onDeleteTaskList(owner: $owner, editors: $editors) {
       id
+      owner
+      editors
       name
       tasks {
         items {
@@ -76,15 +64,6 @@ export const onDeleteTaskList = /* GraphQL */ `
           status
           followingTask
           taskListId
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      users {
-        items {
-          id
-          user
           createdAt
           updatedAt
         }
@@ -129,102 +108,6 @@ export const onDeleteTask = /* GraphQL */ `
       status
       followingTask
       taskListId
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreateUsersTaskLists = /* GraphQL */ `
-  subscription OnCreateUsersTaskLists {
-    onCreateUsersTaskLists {
-      id
-      user
-      taskList {
-        id
-        name
-        tasks {
-          nextToken
-        }
-        users {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateUsersTaskLists = /* GraphQL */ `
-  subscription OnUpdateUsersTaskLists {
-    onUpdateUsersTaskLists {
-      id
-      user
-      taskList {
-        id
-        name
-        tasks {
-          nextToken
-        }
-        users {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteUsersTaskLists = /* GraphQL */ `
-  subscription OnDeleteUsersTaskLists {
-    onDeleteUsersTaskLists {
-      id
-      user
-      taskList {
-        id
-        name
-        tasks {
-          nextToken
-        }
-        users {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreateUser = /* GraphQL */ `
-  subscription OnCreateUser {
-    onCreateUser {
-      id
-      name
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateUser = /* GraphQL */ `
-  subscription OnUpdateUser {
-    onUpdateUser {
-      id
-      name
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteUser = /* GraphQL */ `
-  subscription OnDeleteUser {
-    onDeleteUser {
-      id
-      name
       createdAt
       updatedAt
     }

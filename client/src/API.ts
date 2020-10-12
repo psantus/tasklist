@@ -4,6 +4,8 @@
 
 export type CreateTaskListInput = {
   id?: string | null,
+  owner?: string | null,
+  editors?: Array< string | null > | null,
   name: string,
 };
 
@@ -63,6 +65,8 @@ export enum TaskStatus {
 
 export type UpdateTaskListInput = {
   id: string,
+  owner?: string | null,
+  editors?: Array< string | null > | null,
   name?: string | null,
 };
 
@@ -121,51 +125,10 @@ export type DeleteTaskInput = {
   id?: string | null,
 };
 
-export type CreateUsersTaskListsInput = {
-  id?: string | null,
-  user: string,
-  usersTaskListsTaskListId?: string | null,
-};
-
-export type ModelUsersTaskListsConditionInput = {
-  user?: ModelStringInput | null,
-  and?: Array< ModelUsersTaskListsConditionInput | null > | null,
-  or?: Array< ModelUsersTaskListsConditionInput | null > | null,
-  not?: ModelUsersTaskListsConditionInput | null,
-};
-
-export type UpdateUsersTaskListsInput = {
-  user?: string | null,
-  usersTaskListsTaskListId?: string | null,
-};
-
-export type DeleteUsersTaskListsInput = {
-  id?: string | null,
-};
-
-export type CreateUserInput = {
-  id?: string | null,
-  name?: string | null,
-};
-
-export type ModelUserConditionInput = {
-  name?: ModelStringInput | null,
-  and?: Array< ModelUserConditionInput | null > | null,
-  or?: Array< ModelUserConditionInput | null > | null,
-  not?: ModelUserConditionInput | null,
-};
-
-export type UpdateUserInput = {
-  id: string,
-  name?: string | null,
-};
-
-export type DeleteUserInput = {
-  id?: string | null,
-};
-
 export type ModelTaskListFilterInput = {
   id?: ModelIDInput | null,
+  owner?: ModelStringInput | null,
+  editors?: ModelStringInput | null,
   name?: ModelStringInput | null,
   and?: Array< ModelTaskListFilterInput | null > | null,
   or?: Array< ModelTaskListFilterInput | null > | null,
@@ -183,21 +146,6 @@ export type ModelTaskFilterInput = {
   not?: ModelTaskFilterInput | null,
 };
 
-export type ModelUsersTaskListsFilterInput = {
-  user?: ModelStringInput | null,
-  and?: Array< ModelUsersTaskListsFilterInput | null > | null,
-  or?: Array< ModelUsersTaskListsFilterInput | null > | null,
-  not?: ModelUsersTaskListsFilterInput | null,
-};
-
-export type ModelUserFilterInput = {
-  id?: ModelIDInput | null,
-  name?: ModelStringInput | null,
-  and?: Array< ModelUserFilterInput | null > | null,
-  or?: Array< ModelUserFilterInput | null > | null,
-  not?: ModelUserFilterInput | null,
-};
-
 export type CreateTaskListMutationVariables = {
   input: CreateTaskListInput,
   condition?: ModelTaskListConditionInput | null,
@@ -207,6 +155,8 @@ export type CreateTaskListMutation = {
   createTaskList:  {
     __typename: "TaskList",
     id: string,
+    owner: string | null,
+    editors: Array< string | null > | null,
     name: string,
     tasks:  {
       __typename: "ModelTaskConnection",
@@ -217,17 +167,6 @@ export type CreateTaskListMutation = {
         status: TaskStatus,
         followingTask: string | null,
         taskListId: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-    users:  {
-      __typename: "ModelUsersTaskListsConnection",
-      items:  Array< {
-        __typename: "UsersTaskLists",
-        id: string,
-        user: string,
         createdAt: string,
         updatedAt: string,
       } | null > | null,
@@ -247,6 +186,8 @@ export type UpdateTaskListMutation = {
   updateTaskList:  {
     __typename: "TaskList",
     id: string,
+    owner: string | null,
+    editors: Array< string | null > | null,
     name: string,
     tasks:  {
       __typename: "ModelTaskConnection",
@@ -257,17 +198,6 @@ export type UpdateTaskListMutation = {
         status: TaskStatus,
         followingTask: string | null,
         taskListId: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-    users:  {
-      __typename: "ModelUsersTaskListsConnection",
-      items:  Array< {
-        __typename: "UsersTaskLists",
-        id: string,
-        user: string,
         createdAt: string,
         updatedAt: string,
       } | null > | null,
@@ -287,6 +217,8 @@ export type DeleteTaskListMutation = {
   deleteTaskList:  {
     __typename: "TaskList",
     id: string,
+    owner: string | null,
+    editors: Array< string | null > | null,
     name: string,
     tasks:  {
       __typename: "ModelTaskConnection",
@@ -297,17 +229,6 @@ export type DeleteTaskListMutation = {
         status: TaskStatus,
         followingTask: string | null,
         taskListId: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-    users:  {
-      __typename: "ModelUsersTaskListsConnection",
-      items:  Array< {
-        __typename: "UsersTaskLists",
-        id: string,
-        user: string,
         createdAt: string,
         updatedAt: string,
       } | null > | null,
@@ -372,141 +293,6 @@ export type DeleteTaskMutation = {
   } | null,
 };
 
-export type CreateUsersTaskListsMutationVariables = {
-  input: CreateUsersTaskListsInput,
-  condition?: ModelUsersTaskListsConditionInput | null,
-};
-
-export type CreateUsersTaskListsMutation = {
-  createUsersTaskLists:  {
-    __typename: "UsersTaskLists",
-    id: string,
-    user: string,
-    taskList:  {
-      __typename: "TaskList",
-      id: string,
-      name: string,
-      tasks:  {
-        __typename: "ModelTaskConnection",
-        nextToken: string | null,
-      } | null,
-      users:  {
-        __typename: "ModelUsersTaskListsConnection",
-        nextToken: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type UpdateUsersTaskListsMutationVariables = {
-  input: UpdateUsersTaskListsInput,
-  condition?: ModelUsersTaskListsConditionInput | null,
-};
-
-export type UpdateUsersTaskListsMutation = {
-  updateUsersTaskLists:  {
-    __typename: "UsersTaskLists",
-    id: string,
-    user: string,
-    taskList:  {
-      __typename: "TaskList",
-      id: string,
-      name: string,
-      tasks:  {
-        __typename: "ModelTaskConnection",
-        nextToken: string | null,
-      } | null,
-      users:  {
-        __typename: "ModelUsersTaskListsConnection",
-        nextToken: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type DeleteUsersTaskListsMutationVariables = {
-  input: DeleteUsersTaskListsInput,
-  condition?: ModelUsersTaskListsConditionInput | null,
-};
-
-export type DeleteUsersTaskListsMutation = {
-  deleteUsersTaskLists:  {
-    __typename: "UsersTaskLists",
-    id: string,
-    user: string,
-    taskList:  {
-      __typename: "TaskList",
-      id: string,
-      name: string,
-      tasks:  {
-        __typename: "ModelTaskConnection",
-        nextToken: string | null,
-      } | null,
-      users:  {
-        __typename: "ModelUsersTaskListsConnection",
-        nextToken: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type CreateUserMutationVariables = {
-  input: CreateUserInput,
-  condition?: ModelUserConditionInput | null,
-};
-
-export type CreateUserMutation = {
-  createUser:  {
-    __typename: "User",
-    id: string,
-    name: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type UpdateUserMutationVariables = {
-  input: UpdateUserInput,
-  condition?: ModelUserConditionInput | null,
-};
-
-export type UpdateUserMutation = {
-  updateUser:  {
-    __typename: "User",
-    id: string,
-    name: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type DeleteUserMutationVariables = {
-  input: DeleteUserInput,
-  condition?: ModelUserConditionInput | null,
-};
-
-export type DeleteUserMutation = {
-  deleteUser:  {
-    __typename: "User",
-    id: string,
-    name: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
 export type GetTaskListQueryVariables = {
   id: string,
 };
@@ -515,6 +301,8 @@ export type GetTaskListQuery = {
   getTaskList:  {
     __typename: "TaskList",
     id: string,
+    owner: string | null,
+    editors: Array< string | null > | null,
     name: string,
     tasks:  {
       __typename: "ModelTaskConnection",
@@ -525,17 +313,6 @@ export type GetTaskListQuery = {
         status: TaskStatus,
         followingTask: string | null,
         taskListId: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-    users:  {
-      __typename: "ModelUsersTaskListsConnection",
-      items:  Array< {
-        __typename: "UsersTaskLists",
-        id: string,
-        user: string,
         createdAt: string,
         updatedAt: string,
       } | null > | null,
@@ -558,13 +335,11 @@ export type ListTaskListsQuery = {
     items:  Array< {
       __typename: "TaskList",
       id: string,
+      owner: string | null,
+      editors: Array< string | null > | null,
       name: string,
       tasks:  {
         __typename: "ModelTaskConnection",
-        nextToken: string | null,
-      } | null,
-      users:  {
-        __typename: "ModelUsersTaskListsConnection",
         nextToken: string | null,
       } | null,
       createdAt: string,
@@ -614,100 +389,17 @@ export type ListTasksQuery = {
   } | null,
 };
 
-export type GetUsersTaskListsQueryVariables = {
-  id: string,
-};
-
-export type GetUsersTaskListsQuery = {
-  getUsersTaskLists:  {
-    __typename: "UsersTaskLists",
-    id: string,
-    user: string,
-    taskList:  {
-      __typename: "TaskList",
-      id: string,
-      name: string,
-      tasks:  {
-        __typename: "ModelTaskConnection",
-        nextToken: string | null,
-      } | null,
-      users:  {
-        __typename: "ModelUsersTaskListsConnection",
-        nextToken: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type ListUsersTaskListssQueryVariables = {
-  filter?: ModelUsersTaskListsFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListUsersTaskListssQuery = {
-  listUsersTaskListss:  {
-    __typename: "ModelUsersTaskListsConnection",
-    items:  Array< {
-      __typename: "UsersTaskLists",
-      id: string,
-      user: string,
-      taskList:  {
-        __typename: "TaskList",
-        id: string,
-        name: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null > | null,
-    nextToken: string | null,
-  } | null,
-};
-
-export type GetUserQueryVariables = {
-  id: string,
-};
-
-export type GetUserQuery = {
-  getUser:  {
-    __typename: "User",
-    id: string,
-    name: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type ListUsersQueryVariables = {
-  filter?: ModelUserFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListUsersQuery = {
-  listUsers:  {
-    __typename: "ModelUserConnection",
-    items:  Array< {
-      __typename: "User",
-      id: string,
-      name: string | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null > | null,
-    nextToken: string | null,
-  } | null,
+export type OnCreateTaskListSubscriptionVariables = {
+  owner: string,
+  editors: string,
 };
 
 export type OnCreateTaskListSubscription = {
   onCreateTaskList:  {
     __typename: "TaskList",
     id: string,
+    owner: string | null,
+    editors: Array< string | null > | null,
     name: string,
     tasks:  {
       __typename: "ModelTaskConnection",
@@ -723,26 +415,22 @@ export type OnCreateTaskListSubscription = {
       } | null > | null,
       nextToken: string | null,
     } | null,
-    users:  {
-      __typename: "ModelUsersTaskListsConnection",
-      items:  Array< {
-        __typename: "UsersTaskLists",
-        id: string,
-        user: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
+};
+
+export type OnUpdateTaskListSubscriptionVariables = {
+  owner: string,
+  editors: string,
 };
 
 export type OnUpdateTaskListSubscription = {
   onUpdateTaskList:  {
     __typename: "TaskList",
     id: string,
+    owner: string | null,
+    editors: Array< string | null > | null,
     name: string,
     tasks:  {
       __typename: "ModelTaskConnection",
@@ -753,17 +441,6 @@ export type OnUpdateTaskListSubscription = {
         status: TaskStatus,
         followingTask: string | null,
         taskListId: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-    users:  {
-      __typename: "ModelUsersTaskListsConnection",
-      items:  Array< {
-        __typename: "UsersTaskLists",
-        id: string,
-        user: string,
         createdAt: string,
         updatedAt: string,
       } | null > | null,
@@ -774,10 +451,17 @@ export type OnUpdateTaskListSubscription = {
   } | null,
 };
 
+export type OnDeleteTaskListSubscriptionVariables = {
+  owner: string,
+  editors: string,
+};
+
 export type OnDeleteTaskListSubscription = {
   onDeleteTaskList:  {
     __typename: "TaskList",
     id: string,
+    owner: string | null,
+    editors: Array< string | null > | null,
     name: string,
     tasks:  {
       __typename: "ModelTaskConnection",
@@ -788,17 +472,6 @@ export type OnDeleteTaskListSubscription = {
         status: TaskStatus,
         followingTask: string | null,
         taskListId: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
-      nextToken: string | null,
-    } | null,
-    users:  {
-      __typename: "ModelUsersTaskListsConnection",
-      items:  Array< {
-        __typename: "UsersTaskLists",
-        id: string,
-        user: string,
         createdAt: string,
         updatedAt: string,
       } | null > | null,
@@ -843,111 +516,6 @@ export type OnDeleteTaskSubscription = {
     status: TaskStatus,
     followingTask: string | null,
     taskListId: string,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnCreateUsersTaskListsSubscription = {
-  onCreateUsersTaskLists:  {
-    __typename: "UsersTaskLists",
-    id: string,
-    user: string,
-    taskList:  {
-      __typename: "TaskList",
-      id: string,
-      name: string,
-      tasks:  {
-        __typename: "ModelTaskConnection",
-        nextToken: string | null,
-      } | null,
-      users:  {
-        __typename: "ModelUsersTaskListsConnection",
-        nextToken: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnUpdateUsersTaskListsSubscription = {
-  onUpdateUsersTaskLists:  {
-    __typename: "UsersTaskLists",
-    id: string,
-    user: string,
-    taskList:  {
-      __typename: "TaskList",
-      id: string,
-      name: string,
-      tasks:  {
-        __typename: "ModelTaskConnection",
-        nextToken: string | null,
-      } | null,
-      users:  {
-        __typename: "ModelUsersTaskListsConnection",
-        nextToken: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnDeleteUsersTaskListsSubscription = {
-  onDeleteUsersTaskLists:  {
-    __typename: "UsersTaskLists",
-    id: string,
-    user: string,
-    taskList:  {
-      __typename: "TaskList",
-      id: string,
-      name: string,
-      tasks:  {
-        __typename: "ModelTaskConnection",
-        nextToken: string | null,
-      } | null,
-      users:  {
-        __typename: "ModelUsersTaskListsConnection",
-        nextToken: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnCreateUserSubscription = {
-  onCreateUser:  {
-    __typename: "User",
-    id: string,
-    name: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnUpdateUserSubscription = {
-  onUpdateUser:  {
-    __typename: "User",
-    id: string,
-    name: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
-};
-
-export type OnDeleteUserSubscription = {
-  onDeleteUser:  {
-    __typename: "User",
-    id: string,
-    name: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,

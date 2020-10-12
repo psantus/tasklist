@@ -6,6 +6,8 @@ export const getTaskList = /* GraphQL */ `
   query GetTaskList($id: ID!) {
     getTaskList(id: $id) {
       id
+      owner
+      editors
       name
       tasks {
         items {
@@ -14,15 +16,6 @@ export const getTaskList = /* GraphQL */ `
           status
           followingTask
           taskListId
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      users {
-        items {
-          id
-          user
           createdAt
           updatedAt
         }
@@ -42,11 +35,10 @@ export const listTaskLists = /* GraphQL */ `
     listTaskLists(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        owner
+        editors
         name
         tasks {
-          nextToken
-        }
-        users {
           nextToken
         }
         createdAt
@@ -82,78 +74,6 @@ export const listTasks = /* GraphQL */ `
         status
         followingTask
         taskListId
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const getUsersTaskLists = /* GraphQL */ `
-  query GetUsersTaskLists($id: ID!) {
-    getUsersTaskLists(id: $id) {
-      id
-      user
-      taskList {
-        id
-        name
-        tasks {
-          nextToken
-        }
-        users {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listUsersTaskListss = /* GraphQL */ `
-  query ListUsersTaskListss(
-    $filter: ModelUsersTaskListsFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listUsersTaskListss(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        user
-        taskList {
-          id
-          name
-          createdAt
-          updatedAt
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const getUser = /* GraphQL */ `
-  query GetUser($id: ID!) {
-    getUser(id: $id) {
-      id
-      name
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listUsers = /* GraphQL */ `
-  query ListUsers(
-    $filter: ModelUserFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        name
         createdAt
         updatedAt
       }

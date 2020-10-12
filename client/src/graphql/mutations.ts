@@ -9,6 +9,8 @@ export const createTaskList = /* GraphQL */ `
   ) {
     createTaskList(input: $input, condition: $condition) {
       id
+      owner
+      editors
       name
       tasks {
         items {
@@ -17,15 +19,6 @@ export const createTaskList = /* GraphQL */ `
           status
           followingTask
           taskListId
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      users {
-        items {
-          id
-          user
           createdAt
           updatedAt
         }
@@ -43,6 +36,8 @@ export const updateTaskList = /* GraphQL */ `
   ) {
     updateTaskList(input: $input, condition: $condition) {
       id
+      owner
+      editors
       name
       tasks {
         items {
@@ -51,15 +46,6 @@ export const updateTaskList = /* GraphQL */ `
           status
           followingTask
           taskListId
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      users {
-        items {
-          id
-          user
           createdAt
           updatedAt
         }
@@ -77,6 +63,8 @@ export const deleteTaskList = /* GraphQL */ `
   ) {
     deleteTaskList(input: $input, condition: $condition) {
       id
+      owner
+      editors
       name
       tasks {
         items {
@@ -85,15 +73,6 @@ export const deleteTaskList = /* GraphQL */ `
           status
           followingTask
           taskListId
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      users {
-        items {
-          id
-          user
           createdAt
           updatedAt
         }
@@ -147,120 +126,6 @@ export const deleteTask = /* GraphQL */ `
       status
       followingTask
       taskListId
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const createUsersTaskLists = /* GraphQL */ `
-  mutation CreateUsersTaskLists(
-    $input: CreateUsersTaskListsInput!
-    $condition: ModelUsersTaskListsConditionInput
-  ) {
-    createUsersTaskLists(input: $input, condition: $condition) {
-      id
-      user
-      taskList {
-        id
-        name
-        tasks {
-          nextToken
-        }
-        users {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updateUsersTaskLists = /* GraphQL */ `
-  mutation UpdateUsersTaskLists(
-    $input: UpdateUsersTaskListsInput!
-    $condition: ModelUsersTaskListsConditionInput
-  ) {
-    updateUsersTaskLists(input: $input, condition: $condition) {
-      id
-      user
-      taskList {
-        id
-        name
-        tasks {
-          nextToken
-        }
-        users {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deleteUsersTaskLists = /* GraphQL */ `
-  mutation DeleteUsersTaskLists(
-    $input: DeleteUsersTaskListsInput!
-    $condition: ModelUsersTaskListsConditionInput
-  ) {
-    deleteUsersTaskLists(input: $input, condition: $condition) {
-      id
-      user
-      taskList {
-        id
-        name
-        tasks {
-          nextToken
-        }
-        users {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const createUser = /* GraphQL */ `
-  mutation CreateUser(
-    $input: CreateUserInput!
-    $condition: ModelUserConditionInput
-  ) {
-    createUser(input: $input, condition: $condition) {
-      id
-      name
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updateUser = /* GraphQL */ `
-  mutation UpdateUser(
-    $input: UpdateUserInput!
-    $condition: ModelUserConditionInput
-  ) {
-    updateUser(input: $input, condition: $condition) {
-      id
-      name
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deleteUser = /* GraphQL */ `
-  mutation DeleteUser(
-    $input: DeleteUserInput!
-    $condition: ModelUserConditionInput
-  ) {
-    deleteUser(input: $input, condition: $condition) {
-      id
-      name
       createdAt
       updatedAt
     }

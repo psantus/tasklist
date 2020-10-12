@@ -2,8 +2,13 @@
     <div>
         <h2>{{taskListName}}</h2>
         <ul class="tasks">
-          <li v-for="item in tasksToDisplay" :key="item.id">
-            {{ item.description }} - {{ item.status }}
+          <li v-for="item in tasksToDisplay" v-bind:key="item.id">
+            {{ item.description }} - {{ item.status }} - Move after:
+
+                <select v-model="willPrecede">
+                  <option disabled value="">Move after</option>
+                  <option v-for="opt in tasksToDisplay.filter(el => el != item.id)" v-bind:key="opt.id" value="opt.id">{{ opt.description }}</option>
+                </select>
           </li>
         </ul>
     </div>
@@ -29,6 +34,14 @@ export default {
       taskListIdToDisplay: null,
       taskListName: '',
       tasksToDisplay: null
+    }
+  },
+  computed: {
+    sortedTasks: function () {
+      let result = [];
+      //Todo implement LinkedList (cf. https://www.freecodecamp.org/news/implementing-a-linked-list-in-javascript/)
+      return result;
+      })
     }
   },
   methods: {
